@@ -11,9 +11,10 @@ book:
     - IDA_framework.qmd
     - scope.qmd
     - data_screen.qmd
-    - Bact_intro.qmd
-    - Bact_SAP.qmd
-    - Bact_missing.qmd
+    - part: Bact_intro.qmd
+      chapters:
+      - Bact_SAP.qmd
+      - Bact_missing.qmd
     #- Bact_univar.qmd ## long running jobs - use ARd or freeze
     #- Bact_multivar.qmd
     #- Bact_suppl.qmd
