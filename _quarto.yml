@@ -3,13 +3,14 @@ project:
   output-dir: docs
 
 book:
-  title: "Regression report"
-  author: "Jane Doe"
+  title: "Regression without regrets"
+  author: "M. Baillie, G. Heinze & M. Huebner"
   date: "7/13/2022"
   chapters:
     - index.qmd
-    - intro.qmd
-    - summary.qmd
+    - IDA_framework.qmd
+    - scope.qmd
+    - data_screen.qmd
     - references.qmd
 
 bibliography: references.bib
@@ -20,5 +21,3 @@ format:
 
 execute:
   freeze: auto
-
-
