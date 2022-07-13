@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang=""><head>
+  <meta charset="utf-8">
+  <meta name="generator" content="quarto-0.2.232">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Regression without regrets - 4&nbsp; IDA plan</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <script src="site_libs/quarto-nav/quarto-nav.js"></script>
+  <script src="site_libs/quarto-nav/headroom.min.js"></script>
+  <script src="site_libs/clipboard/clipboard.min.js"></script>
+  <meta name="quarto:offset" content="./">
+  <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+  <script src="site_libs/quarto-search/fuse.min.js"></script>
+  <script src="site_libs/quarto-search/quarto-search.js"></script>
+  <link href="./Bact_missing.html" rel="next">
+  <link href="./Bact_intro.html" rel="prev">
+  <script src="site_libs/quarto-html/quarto.js"></script>
+  <script src="site_libs/quarto-html/popper.min.js"></script>
+  <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+  <script src="site_libs/quarto-html/anchor.min.js"></script>
+  <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+  <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+  <script src="site_libs/bootstrap/bootstrap.min.js"></script>
+  <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+  <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <script id="quarto-search-options" type="application/json">{
+    "location": "sidebar",
+    "copy-button": false,
+    "collapse-after": 2,
+    "panel-placement": "start",
+    "type": "textbox",
+    "limit": 20
+  }</script>
+</head>
+<body>
+<div id="quarto-search-results"></div>
+<header id="quarto-header" class="headroom fixed-top">
+<nav class="quarto-secondary-nav py-2 d-lg-none d-md-block " data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <div class="container-fluid d-flex justify-content-between">
+    <h1 class="quarto-secondary-nav-title mb-0 fs-3 d-inline"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">IDA plan</span></h1>
+    <button type="button" class="quarto-btn-toggle btn d-lg-none py-0 px-1 d-inline-block border-0 ">
+      <i class="bi bi-chevron-right"></i>
+    </button>
+  </div>
+</nav>
+</header>
+ <!-- /navbar/sidebar -->
+<div class="container-fluid quarto-container d-flex flex-column page-layout-article" id="quarto-content">
+<div class="row flex-fill">
+  <div id="quarto-sidebar" class="col col-12 col-lg-3 d-lg-flex px-0 pt-0 sidebar collapse sidebar-navigation">
+    <nav class="ms-lg-auto floating overflow-auto">
+  <div class="px-3 pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Regression without regrets</a> 
+        <div class="sidebar-tools-main">
+</div>
+    </div>
+  </div>
+    <div class="px-3 mt-2 flex-shrink-0 align-items-center">
+      <div class="sidebar-search">
+      <div id="quarto-search" class="mb-0 " title="Search">
+</div>
+      </div>
+    </div>
+  <div class="sidebar-menu-container"> 
+  <ul class="list-unstyled mt-1 px-3">
+      <li class="sidebar-item">
+  <a href="./index.html" class="">Preface</a>
+</li>
+      <li class="sidebar-item">
+  <a href="./IDA_framework.html" class=""><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">IDA Framework</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./scope.html" class=""><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Scope of the regression analyses for the examples</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./data_screen.html" class=""><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data screening and possible actions</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./Bact_intro.html" class="">Bacteremia</a>
+</li>
+      <li class="sidebar-item">
+  <a href="./Bact_SAP.html" class="active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">IDA plan</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./Bact_missing.html" class=""><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Missing data</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./references.html" class="">References</a>
+</li>
+  </ul>
+  </div>
+</nav>
+  </div>
+  <div id="quarto-toc-sidebar" class=" pt-0 col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
+<h2 id="toc-title">On this page</h2>
+<ul>
+<li><a href="#preparations" class="nav-link active" data-scroll-target="#preparations"> <span class="header-section-number">4.1</span> Preparations</a></li>
+<li><a href="#ida-domains" class="nav-link" data-scroll-target="#ida-domains"> <span class="header-section-number">4.2</span> IDA domains</a>
+<ul class="collapse">
+<li><a href="#ida-domain-missing-values" class="nav-link" data-scroll-target="#ida-domain-missing-values"> <span class="header-section-number">4.2.1</span> IDA domain: missing values</a></li>
+<li><a href="#ida-domain-univariate-distributions" class="nav-link" data-scroll-target="#ida-domain-univariate-distributions"> <span class="header-section-number">4.2.2</span> IDA domain: univariate distributions</a></li>
+<li><a href="#ida-domain-multivariate-system-of-variables" class="nav-link" data-scroll-target="#ida-domain-multivariate-system-of-variables"> <span class="header-section-number">4.2.3</span> IDA domain: multivariate system of variables</a></li>
+</ul></li>
+<li><a href="#sources" class="nav-link" data-scroll-target="#sources"> <span class="header-section-number">4.3</span> Sources</a>
+<ul class="collapse">
+<li><a href="#data-dictionary" class="nav-link" data-scroll-target="#data-dictionary"> <span class="header-section-number">4.3.1</span> Data dictionary</a></li>
+</ul></li>
+<li><a href="#references" class="nav-link" data-scroll-target="#references"> <span class="header-section-number">4.4</span> References</a></li>
+</ul>
+</nav></div>
+  <div class="col mx-auto col-sm-12 col-md-9 col-lg-7 col-xl-7 px-lg-4 pe-xxl-4 ps-xxl-3">
+<main>
+<header id="title-block-header">
+<h1 class="title d-none d-lg-block display-7"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">IDA plan</span></h1>
+</header>
+
+<div class="cell">
+
+</div>
+<p>Since a key principle of IDA is not to touch the research questions, before IDA commences the research aim and statistical analysis plan needs to be in place. IDA may lead to an update or refinement of the analysis plan. To demonstrate the workflow and content of IDA, we created a hypothetical research aim and corresponding statistical analysis plan.</p>
+<p>IDA follows the generic IDA plan developed in this project and is adapted to the data set given the hypothetical research aim.</p>
+<section id="preparations" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="preparations"><span class="header-section-number">4.1</span> Preparations</h2>
+<p><em>1. Statistical analysis plan: as assumed above, the analysis strategy to answer the main research question has been prespecified. It comprises of the set of independent variables to be considered in a model, the outcome variable, and the analytical strategy to build the regression model.</em></p>
+<p>The aim of the analysis is to derive a parsimonious model to predict bacteremia status from age, gender, and 49 continuous laboratory variables. Logistic regression with consideration of nonlinear effects by fractional polynomials will be considered. The multivariable fractional polynomial algorithm will be employed considering first-order fractional polynomials for the continuous covariates. In a first step, optimal transformations for each covariate will be determined without variable selection. In the second step, we will apply the garrote to assign nonnegative shrinkage factors to the coefficients. The shrinkage factors will be determined by optimizing AIC in the second step. It is considered to impute missing values using multiple imputation with chained equations, and to generate a stacked data set for analysis. The number of imputations will be determined after initial data analysis. To assess internal performance of the diagnostic model, we will consider 10-fold cross-validation (CV), repeating the above-described model building steps. The folds will be built by dividing the patient cohort into 10 approximately equally-sized groups. All imputed observations of a patient will be assigned to the same fold. From the 10-fold CV, the area under the ROC, the calibration in the large and the calibration slope will be estimated and reported. The final regression model will be derived from analysing the full cohort with that strategy.</p>
+<p><em>2. Data dictionary and metadata: a detailed data dictionary should be available which informs about the meaning of each variable in context of the research question, the units of measurement, the possible levels in case of categorical variables, or admissible values. More generally, metadata, also refer to information about the research study protocol and data collection processes.</em></p>
+<p>A data dictionary is available.</p>
+<p><em>3. Domain expertise and pivotal covariates (‘very important predictors’, VIPs)</em></p>
+<p><em>3.1. In particular for analyses with a moderate to high number of covariates, domain expertise should guide assumptions which covariates are considered to be 'strongly related' with the outcome and hence are ‘very important predictors’ in the regression model, and which variables have a weak or unknown association with the outcome (cf.&nbsp;Heinze et al, Biometrical Journal 2018). Depending on context and assumptions on strength of association with the outcome variable, two to three pivotal covariates should be defined (e.g., age and sex).</em></p>
+<p>Pivotal covariates:</p>
+<p>Ratzinger et al (2014) cite 5 papers who have proposed a prediction model for bacteremia before. From these papers, the following knowledge could be extracted:</p>
+<p>Covariates with assumed strong association with bacteremia:</p>
+<ul>
+<li>Jaimes (2004):
+<ul>
+<li>age</li>
+<li>heart rate</li>
+<li>temperature</li>
+<li>leukocyte count</li>
+<li>use of central venous catheter</li>
+<li>length of hospitalization</li>
+</ul></li>
+<li>Bates 1997
+<ul>
+<li>Suspected or documented focal infection at onset</li>
+<li>antibiotics before onset</li>
+<li>any liver disease</li>
+<li>Hickman catheter present</li>
+<li>altered mental status within 24h</li>
+<li>focal abdominal signs withing 24h</li>
+</ul></li>
+<li>Lee (2012)
+<ul>
+<li>age</li>
+<li>presence of rigor</li>
+<li>presence of chills</li>
+<li>body temperature</li>
+<li>blood urea nitrogen</li>
+<li>blood urea nitrogen/creatinine ratio</li>
+<li>thrombocytopenia</li>
+</ul></li>
+<li>Tudela (2010)
+<ul>
+<li>Charlson index</li>
+<li>PCT</li>
+</ul></li>
+<li>Kuppermann (1998)
+<ul>
+<li>age</li>
+<li>temperature</li>
+<li>clinical score</li>
+<li>WBC count</li>
+<li>absolute neutrophil count</li>
+<li>absolute band count</li>
+</ul></li>
+</ul>
+<p>It has to be admitted that some of these selections are based on inappropriate methods, e.g., use of univariate logistic regression screening, or were derived for special settings or cohorts, e.g.&nbsp;use in emergency room, or use in children.</p>
+<p>Out of the set of variables used in the models of the cited 5 papers, the following six variables also available in our data set and are considered as very important predictors (VIPs):</p>
+<ul>
+<li>age (mentioned in 3 papers)</li>
+<li>leukocytes (WBC) (2)</li>
+<li>blood urea neutrogen (BUN) (1)</li>
+<li>creatinine (KREA) (1)</li>
+<li>thrombocytes (PLT) (1)</li>
+<li>neutrophiles (NEU) (1)</li>
+</ul>
+<p>Based on this review, we consider age and leukocytes (WBC) as pivotal covariates for the research question.</p>
+<p><em>3.2. Domain expertise may also be useful to specify in advance which variables are expected to correlate with each other. This background knowledge could be summarized in a directed or undirected acyclic graph connecting the covariates with each other as also suggested by Heinze et al, 2018.</em></p>
+<p>Important variable groups for modeling may be from the group of leukocytes, kidney function related parameters and parameters indicating a reaction to an acute phase.</p>
+<p><em>Leukocytes</em></p>
+<p>The following systematic dependencies between variables exist:</p>
+<ul>
+<li>WBC <span class="math inline">\(\approx\)</span> BASO + EOS + NEU + LYM + MONO</li>
+</ul>
+<p>In some patients, this relation may only approximately apply because they are in an acute infection phase.</p>
+<p>Moreover, the following variables are percentages and hence sum up to 100:</p>
+<ul>
+<li><code>BASOR = BASO / (BASO + EOS + NEU + LYM + MONO) * 100</code></li>
+<li><code>EOSR = EOS / (BASO + EOS + NEU + LYM + MONO) * 100</code></li>
+<li><code>NEUR = NEU / (BASO + EOS + NEU + LYM + MONO) * 100</code><br>
+</li>
+<li><code>MONOR = MONO / (BASO + EOS + NEU + LYM + MONO) * 100</code></li>
+<li><code>LYMR = LYM / (BASO + EOS + NEU + LYM + MONO) * 100</code></li>
+<li><code>BASOR + EOSR + NEU + MONOR + LYMR = 100</code></li>
+</ul>
+<p>Therefore, at least one of these five variables is redundant.</p>
+<p><em>Acute phase reaction</em></p>
+<p>An acute phase reaction may be indicated by FIB, CRP, and the liver parameters ASAT, ALAT and GGT; hence some correlation between these variables is expected.</p>
+<p><em>Kidney function indicators</em></p>
+<p>Potassium level (<code>K</code>), blood urea nitrogen (<code>BUN</code>) and serum creatinine (Scr, <code>KREA</code>) are variables that are related to kidney function. Kidney function is usually expressed as estimated glomerular filtration rate (eGFR). Using the CKD-EPI-formula, eGFR can be computed as follows, with sex-specific constants <span class="math inline">\(\kappa\)</span> (<code>kappa</code>) and <span class="math inline">\(\alpha\)</span> (<code>alpha</code>):</p>
+<p><span class="math inline">\(eGFR = 141 \times min(Scr/\kappa, 1)^\alpha \times max(Scr/\kappa, 1)^{-1.209} \times 0.993^{age}\)</span></p>
+<p>where for males <span class="math inline">\(\kappa = 0.9, \alpha = -0.411\)</span>, and for females <span class="math inline">\(\kappa = 0.7, \alpha = -0.329\)</span>.</p>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>kappa <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fl">0.7</span>, <span class="fu">nrow</span>(a_bact))</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>kappa[a_bact<span class="sc">$</span>SEX<span class="sc">==</span><span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fl">0.9</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="sc">-</span><span class="fl">0.329</span>, <span class="fu">nrow</span>(a_bact))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>alpha[a_bact<span class="sc">$</span>SEX<span class="sc">==</span><span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">0.411</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>a_bact<span class="sc">$</span>eGFR <span class="ot">&lt;-</span> <span class="dv">141</span> <span class="sc">*</span> <span class="fu">apply</span>(<span class="fu">cbind</span>(a_bact<span class="sc">$</span>CREA<span class="sc">/</span>kappa, <span class="dv">1</span>),<span class="dv">1</span>,min)<span class="sc">**</span>alpha <span class="sc">*</span> <span class="fu">apply</span>(<span class="fu">cbind</span>(a_bact<span class="sc">$</span>CREA<span class="sc">/</span>kappa, <span class="dv">1</span>),<span class="dv">1</span>,max)<span class="sc">**</span>(<span class="sc">-</span><span class="fl">1.209</span>) <span class="sc">*</span> <span class="fl">0.993</span><span class="sc">**</span>a_bact<span class="sc">$</span>AGE <span class="sc">*</span> <span class="fl">1.018</span><span class="sc">**</span>(a_bact<span class="sc">$</span>SEX<span class="sc">==</span><span class="dv">2</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>a_bact<span class="sc">$</span>BUN_CREA <span class="ot">&lt;-</span> a_bact<span class="sc">$</span>BUN <span class="sc">/</span> a_bact<span class="sc">$</span>CREA</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>b_bact <span class="ot">&lt;-</span> Hmisc<span class="sc">::</span><span class="fu">upData</span>(a_bact ,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>               <span class="at">labels =</span> <span class="fu">c</span>(<span class="at">eGFR =</span> <span class="st">'estimated glomerular filtration rate'</span>, </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>                          <span class="at">BUN_CREA =</span> <span class="st">'BUN/Scr ratio'</span>),</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>               <span class="at">units =</span> <span class="fu">c</span>(<span class="at">eGFR =</span> <span class="st">'mL/min/1.73 m^2'</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                         <span class="at">BUN_CREA =</span> <span class="st">'unitless'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Input object size:   5456368 bytes;  56 variables    14691 observations
+New object size:    5456400 bytes;  56 variables    14691 observations</code></pre>
+</div>
+</div>
+<p>Some correlation between these kidney function indicators (eGFR, potassium, BUN) can be expected. eGFR is a widely accepted and interpretable summary of kidney function. BUN should be in the range 6-20 (8-23 for adults older than 60 years). An ideal ratio of BUN to Scr is between 10 and 20. Ratios higher than 20 may be associated with high protein diet but also with impaired eGFR (lower than 60).</p>
+<p>We define groups of variables: demographical, structural, key predictors, leukocyte-related, leukocyte-ratio-related, kidney-related, acute-phase related:</p>
+<div class="cell">
+<div class="sourceCode" id="cb3"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>demog_vars <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"AGE"</span>, <span class="st">"SEX"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>structural_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"WBC"</span>, <span class="st">"AGE"</span>, <span class="st">"SEX"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>key_predictors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"WBC"</span>, <span class="st">"AGE"</span>, <span class="st">"BUN"</span>,<span class="st">"CREA"</span>,<span class="st">"NEU"</span>,<span class="st">"PLT"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>leuko_related_vars <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"WBC"</span>, <span class="st">"NEU"</span>, <span class="st">"EOS"</span>, <span class="st">"BASO"</span>, <span class="st">"LYM"</span>, <span class="st">"MONO"</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>leuko_ratio_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"NEUR"</span>, <span class="st">"EOSR"</span>, <span class="st">"BASOR"</span>, <span class="st">"LYMR"</span>, <span class="st">"MONOR"</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>kidney_related_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"BUN"</span>, <span class="st">"POTASS"</span>, <span class="st">"CREA"</span>, <span class="st">"eGFR"</span>, <span class="st">"BUN_CREA"</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>acute_related_vars <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"FIB"</span>, <span class="st">"CRP"</span>, <span class="st">"ASAT"</span>, <span class="st">"ALAT"</span>, <span class="st">"GGT"</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>outcome_vars <span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">"BloodCulture"</span>, <span class="st">"BC"</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>remaining_vars <span class="ot">&lt;-</span> <span class="fu">names</span>(a_bact)[<span class="fu">is.na</span>(<span class="fu">match</span>(<span class="fu">names</span>(a_bact),<span class="fu">c</span>(<span class="st">"ID"</span>, demog_vars, structural_vars, key_predictors,leuko_related_vars,leuko_ratio_vars, kidney_related_vars,acute_related_vars, outcome_vars)))]</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>bact_variables <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">demog_vars=</span>demog_vars, <span class="at">structural_vars=</span>structural_vars, <span class="at">key_predictors=</span>key_predictors, <span class="at">leuko_related_vars=</span>leuko_related_vars, <span class="at">leuko_ratio_vars=</span>leuko_ratio_vars, <span class="at">kidney_related_vars=</span>kidney_related_vars, <span class="at">acute_related_vars=</span>acute_related_vars,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>                       <span class="at">remaining_vars=</span>remaining_vars, <span class="at">outcome_vars=</span>outcome_vars)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><em>3.3. Missing value mechanisms: if not already specified in meta data, domain experts should also be consulted to explain possible reasons for the occurrence of missing values for each variable, which may be categorized as systematic or unsystematic.</em></p>
+<p>A certain proportion of missing values is expected because of the lab test request which is often specific to the underlying condition. No specific expectations can be made.</p>
+</section>
+<section id="ida-domains" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="ida-domains"><span class="header-section-number">4.2</span> IDA domains</h2>
+<section id="ida-domain-missing-values" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="ida-domain-missing-values"><span class="header-section-number">4.2.1</span> IDA domain: missing values</h3>
+<p><em>1. Number and proportion of missing values for each independent variable, for the dependent variable and for the analysis as a whole.</em></p>
+<p>Number and proportion of missing values will be computed for age, sex, the 49 laboratory variables, BloodCulture, as well as for the analysis as a whole.</p>
+<p><em>2. Patterns of missing values across all independent variables, either as tables or appropriately visualized.</em></p>
+<p>We will create missing value indicators for each covariate and will then summarize patterns by means of a heat map and a dendogram.</p>
+</section>
+<section id="ida-domain-univariate-distributions" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="ida-domain-univariate-distributions"><span class="header-section-number">4.2.2</span> IDA domain: univariate distributions</h3>
+<p><em>3. For categorical variables (including the dependent variable): frequency and proportion for each category.</em></p>
+<p>Sex and BloodCulture will be described by frequencies and proportions.</p>
+<p><em>4. For continuous variables (including the dependent variable): high-resolution histogram, summary of main percentiles (1st, 10th, 25th, 50th, 75th, 90th, 99th) and interquartile range, 5 highest and 5 lowest values, first four moments (mean, variance, skewness, curtosis), standard deviation, number of distinct values.</em></p>
+<p>Summaries for all 50 continuous variables (age and 49 laboratory variables) will be created to depict their marginal distributions by means of high-resolution histograms. Furthermore, each continuous variable will be described by 1st, 10th, 25th, 50th, 75th, 90th, 99th percentiles, interquartile range, the 5 highest and 5 lowest values, the first four moments (mean, variance, skewness, curtosis), standard deviation, and the number of distinct values.</p>
+<p>The graphical summary for each variable will serve to suggest transformations for each variable:</p>
+<ul>
+<li>no transformation (in case of approximate symmetry);</li>
+<li><span class="math inline">\(\log_{10}(x+c)\)</span> or <span class="math inline">\(\log_2(x+c)\)</span> transformation (in case of skewness), determination of the ‘safety’ constant <span class="math inline">\(c\)</span> as the value that optimizes correlation with standard normal scores.</li>
+</ul>
+<p>The distributions of transformed variables will be evaluated in the same way as the original variables as described above.</p>
+</section>
+<section id="ida-domain-multivariate-system-of-variables" class="level3" data-number="4.2.3">
+<h3 data-number="4.2.3" class="anchored" data-anchor-id="ida-domain-multivariate-system-of-variables"><span class="header-section-number">4.2.3</span> IDA domain: multivariate system of variables</h3>
+<p><em>5. Matrix/heatmap of Pearson correlation coefficients between all independent variables.</em></p>
+<p>Using the suggested transformations for each variable, Pearson correlation coefficients will be computed between all independent variables. The correlation coefficients will be depicted by means of a (quadratic) heat map. Moreover, a network graph between all independent variables will be constructed, which will be thresholded at an absolute correlation coefficient of 0.3.</p>
+<p>Spearman correlation coefficients will be computed as well, and the 10 pairs of covariates with the largest absolute difference between Pearson and Spearman correlation coefficients will be flagged. These pairs will be graphically investigated by constructing separate scatterplots.</p>
+<p><em>6. Appropriate visual presentation of the association of each covariate with the two pivotal covariates.</em></p>
+<p>Also for this analysis, transformations of covariates will be used as identified in step 4.</p>
+<p>First, the distribution of age will be depicted as histogram stratified for sex.</p>
+<p>Second, a scatterplot of leukocytes by age will be constructed, using different colours for the two sexes.</p>
+<p>Third, age will be categorized into three groups: <span class="math inline">\(\geq\)</span> 65 years, 50-65 years, <span class="math inline">\(&lt;\)</span> 50 years. Should this lead to a very imbalanced distribution of patients (the largest group containing more than four times as many patients as the smallest group), groups will be defined based on 25th and 75th percentiles. Each lab variable (or its transformation) will then be depicted in a scatterplot with leukocytes (or its transformation) in each of the three age groups, marking the dots with two different colours representing sex.</p>
+<p>Fourth, a heat map of the raw data (or transformations) will be constructed.</p>
+<p>Fifth, a redundancy analysis will be conducted for each variable. This analysis identifies predictors that can be almost perfectly predicted by flexible parametric additive models performed on the companion covariates. As this analysis can only be conducted with complete data for all variables, it will be done</p>
+<ul>
+<li>based on a flexible parametric additive model only involving the 5 above-mentioned pivotal covariates (complete cases)</li>
+<li>for the complete-cases set using the <code>rms::redun</code> function</li>
+<li>for each of 5 randomly selected imputed data sets (after multiple imputation has been conducted) using <code>rms::redun</code></li>
+</ul>
+<p><em>7. If interactions between covariates were prespecified to be included in the regression model, special attention should be given to evaluate the bivariate distribution of the interacting covariates. Appropriate graphical displays (see 6) should be used to visualise these distributions.</em></p>
+<p>No interactions are assumed to be considered.</p>
+</section>
+</section>
+<section id="sources" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="sources"><span class="header-section-number">4.3</span> Sources</h2>
+<p>Data is available in this repository (subfolder <strong>data</strong>).</p>
+<p>To download the data set, click the <a href="https://github.com/bailliem/ida-regression-private/tree/master/data/Bacteremia_public_S2.csv">link to data set</a></p>
+<section id="data-dictionary" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="data-dictionary"><span class="header-section-number">4.3.1</span> Data dictionary</h3>
+<p>The data dictionary can also be found [in this repository] (https://github.com/bailliem/ida-regression-private/tree/master/misc/bacteremia-DataDictionary.csv)</p>
+</section>
+</section>
+<section id="references" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="references"><span class="header-section-number">4.4</span> References</h2>
+<p>Ratzinger, F., Dedeyan, M., Rammerstorfer, M., Perkmann, T., Burgmann, H., Makristathis, A., Dorffner, G., Lötsch, F., Blacky, A., Ramharter, M., 2014. A Risk Prediction Model for Screening Bacteremic Patients: A Cross Sectional Study. PLOS ONE 9, e106765. doi:<a href="https://dx.doi.org/10.1371/journal.pone.0106765">10.1371/journal.pone.0106765</a></p>
+<div class="cell">
+<div class="sourceCode" id="cb4"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(<span class="at">list=</span><span class="fu">c</span>(<span class="st">"b_bact"</span>, <span class="st">"bact_variables"</span>, <span class="st">"demog_vars"</span>, <span class="st">"structural_vars"</span>,<span class="st">"key_predictors"</span>,<span class="st">"leuko_related_vars"</span>,<span class="st">"leuko_ratio_vars"</span>,<span class="st">"kidney_related_vars"</span>, <span class="st">"acute_related_vars"</span>,<span class="st">"remaining_vars"</span>), <span class="at">file =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"bact_env_b.rda"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+
+</section>
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    setTimeout(function() {
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    window.tippy(el, {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    }); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</main>
+<div class="page-navigation ">
+  <div class="nav-page nav-page-previous">
+      <a href="./Bact_intro.html">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Bacteremia</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./Bact_missing.html">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Missing data</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</div>
+</div> <!-- /main column -->
+</div> <!-- /row -->
+</div> <!-- /container fluid -->
+
+
+</body></html>

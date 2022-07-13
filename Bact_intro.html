@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang=""><head>
+  <meta charset="utf-8">
+  <meta name="generator" content="quarto-0.2.232">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Regression without regrets - Bacteremia</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <script src="site_libs/quarto-nav/quarto-nav.js"></script>
+  <script src="site_libs/quarto-nav/headroom.min.js"></script>
+  <script src="site_libs/clipboard/clipboard.min.js"></script>
+  <meta name="quarto:offset" content="./">
+  <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+  <script src="site_libs/quarto-search/fuse.min.js"></script>
+  <script src="site_libs/quarto-search/quarto-search.js"></script>
+  <link href="./Bact_SAP.html" rel="next">
+  <link href="./data_screen.html" rel="prev">
+  <script src="site_libs/quarto-html/quarto.js"></script>
+  <script src="site_libs/quarto-html/popper.min.js"></script>
+  <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+  <script src="site_libs/quarto-html/anchor.min.js"></script>
+  <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+  <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+  <script src="site_libs/bootstrap/bootstrap.min.js"></script>
+  <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+  <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <script id="quarto-search-options" type="application/json">{
+    "location": "sidebar",
+    "copy-button": false,
+    "collapse-after": 2,
+    "panel-placement": "start",
+    "type": "textbox",
+    "limit": 20
+  }</script>
+</head>
+<body>
+<div id="quarto-search-results"></div>
+<header id="quarto-header" class="headroom fixed-top">
+<nav class="quarto-secondary-nav py-2 d-lg-none d-md-block " data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <div class="container-fluid d-flex justify-content-between">
+    <h1 class="quarto-secondary-nav-title mb-0 fs-3 d-inline">Bacteremia</h1>
+    <button type="button" class="quarto-btn-toggle btn d-lg-none py-0 px-1 d-inline-block border-0 ">
+      <i class="bi bi-chevron-right"></i>
+    </button>
+  </div>
+</nav>
+</header>
+ <!-- /navbar/sidebar -->
+<div class="container-fluid quarto-container d-flex flex-column page-layout-article" id="quarto-content">
+<div class="row flex-fill">
+  <div id="quarto-sidebar" class="col col-12 col-lg-3 d-lg-flex px-0 pt-0 sidebar collapse sidebar-navigation">
+    <nav class="ms-lg-auto floating overflow-auto">
+  <div class="px-3 pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Regression without regrets</a> 
+        <div class="sidebar-tools-main">
+</div>
+    </div>
+  </div>
+    <div class="px-3 mt-2 flex-shrink-0 align-items-center">
+      <div class="sidebar-search">
+      <div id="quarto-search" class="mb-0 " title="Search">
+</div>
+      </div>
+    </div>
+  <div class="sidebar-menu-container"> 
+  <ul class="list-unstyled mt-1 px-3">
+      <li class="sidebar-item">
+  <a href="./index.html" class="">Preface</a>
+</li>
+      <li class="sidebar-item">
+  <a href="./IDA_framework.html" class=""><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">IDA Framework</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./scope.html" class=""><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Scope of the regression analyses for the examples</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./data_screen.html" class=""><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data screening and possible actions</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./Bact_intro.html" class="active">Bacteremia</a>
+</li>
+      <li class="sidebar-item">
+  <a href="./Bact_SAP.html" class=""><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">IDA plan</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./Bact_missing.html" class=""><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Missing data</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./references.html" class="">References</a>
+</li>
+  </ul>
+  </div>
+</nav>
+  </div>
+  <div id="quarto-toc-sidebar" class=" pt-0 col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
+<h2 id="toc-title">On this page</h2>
+<ul>
+<li><a href="#introduction-to-bacteremia" class="nav-link active" data-scroll-target="#introduction-to-bacteremia">Introduction to Bacteremia</a>
+<ul class="collapse">
+<li><a href="#dataset-description" class="nav-link" data-scroll-target="#dataset-description">Dataset Description</a></li>
+<li><a href="#bacteremia-dataset-contents" class="nav-link" data-scroll-target="#bacteremia-dataset-contents">Bacteremia dataset contents</a>
+<ul class="collapse">
+<li><a href="#source-dataset" class="nav-link" data-scroll-target="#source-dataset">Source dataset</a></li>
+<li><a href="#updated-analysis-dataset" class="nav-link" data-scroll-target="#updated-analysis-dataset">Updated analysis dataset</a></li>
+</ul></li>
+<li><a href="#section-session-info" class="nav-link" data-scroll-target="#section-session-info">Section session info</a></li>
+</ul></li>
+</ul>
+</nav></div>
+  <div class="col mx-auto col-sm-12 col-md-9 col-lg-7 col-xl-7 px-lg-4 pe-xxl-4 ps-xxl-3">
+<main>
+<header id="title-block-header">
+<h1 class="title d-none d-lg-block display-7">Bacteremia</h1>
+</header>
+
+<div class="cell">
+
+</div>
+<section id="introduction-to-bacteremia" class="level1">
+<h1>Introduction to Bacteremia</h1>
+<p>To demonstrate the workflow and content of IDA, we created a hypothetical research aim and corresponding statistical analysis plan, which is described in more detail in the section <a href="Bact_SAP.Rmd">Bact_SAP.Rmd</a>.</p>
+<p><strong>Hypothetical research aim for IDA</strong> is to develop a multivariable diagnostic model for bacteremia using 49 continuous laboratory blood parameters, age and gender with the primary aim of prediction and a secondary aim of describing the association of each variable with the outcome (‘explaining’ the multivariable model).</p>
+<p>A diagnostic prediction model was developed based on this data set and validated in “A Risk Prediction Model for Screening Bacteremic Patients: A Cross Sectional Study” <a href="https://doi.org/10.1371/journal.pone.0106765">Ratzinger et al, PLoS One 2014</a>. The assumed research aim is in line with this diagnostic prediction model.</p>
+<section id="dataset-description" class="level2">
+<h2 class="anchored" data-anchor-id="dataset-description">Dataset Description</h2>
+<p>Ratzinger et al (2014) performed a diagnostic study in which age, sex and 49 laboratory variables can be used to diagnose bacteremia status of a blood sample using a multivariable model. Between January 2006 and December 2010, patients with the clinical suspicion to suffer from bacteraemia were included if blood culture analysis was requested by the responsible physician and blood was sampled for assessment of haematology and biochemistry. The data consists of 14,691 observations from different patients.</p>
+<p>Our version of this data was slightly modified compared to original version, and this modified version was cleared by the Medical University of Vienna for public use (DC 2019-0054). Variable names have been kept as they were (partly German abbreviations). A data dictionary is available in the <strong>misc</strong> folder of the project directory (‘bacteremia-DataDictionary.csv’).</p>
+<p>In the original paper describing the study <a href="https://doi.org/10.1371/journal.pone.0106765">(Ratzinger et al, PLoS One 2014)</a>, a machine learning approach was taken to diagnose a positive status of blood culture. The true status was determined for all blood samples by blood culture analysis, which is the gold standard. Here we will make use of a multivariable logistic regression model.</p>
+</section>
+<section id="bacteremia-dataset-contents" class="level2">
+<h2 class="anchored" data-anchor-id="bacteremia-dataset-contents">Bacteremia dataset contents</h2>
+<section id="source-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="source-dataset">Source dataset</h3>
+<p>We refer to the source data set as the dataset available in this repository.</p>
+<p>Display the source dataset contents. This dataset is in the <strong>data</strong> folder of the project directory.</p>
+<div class="cell-output-display">
+<hr><h4 class="anchored">Data frame:bact</h4>14691 observations and 53 variables, maximum # NAs:7114  
+ <hr>
+ <style>
+ .hmisctable487253 {
+ border: 1px solid gray;
+ border-collapse: collapse;
+ font-size: 100%;
+ }
+ .hmisctable487253 td {
+ text-align: right;
+ padding: 0 1ex 0 1ex;
+ }
+ .hmisctable487253 th {
+ color: Black;
+ text-align: center;
+ padding: 0 1ex 0 1ex;
+ font-weight: bold;
+ }
+ </style>
+ <table class="hmisctable487253" border="1">
+ <tbody><tr><th>Name</th><th>Storage</th><th>NAs</th></tr>
+ <tr><td>ID</td><td>integer</td><td>   0</td></tr>
+ <tr><td>SEX</td><td>integer</td><td>   0</td></tr>
+ <tr><td>AGE</td><td>integer</td><td>   0</td></tr>
+ <tr><td>MCV</td><td>double</td><td>  42</td></tr>
+ <tr><td>HGB</td><td>double</td><td>  41</td></tr>
+ <tr><td>HCT</td><td>double</td><td>  42</td></tr>
+ <tr><td>PLT</td><td>integer</td><td>  42</td></tr>
+ <tr><td>MCH</td><td>double</td><td>  42</td></tr>
+ <tr><td>MCHC</td><td>double</td><td>  42</td></tr>
+ <tr><td>RDW</td><td>double</td><td>  56</td></tr>
+ <tr><td>MPV</td><td>double</td><td> 702</td></tr>
+ <tr><td>LYM</td><td>double</td><td> 262</td></tr>
+ <tr><td>MONO</td><td>double</td><td> 246</td></tr>
+ <tr><td>EOS</td><td>double</td><td> 135</td></tr>
+ <tr><td>BASO</td><td>double</td><td> 146</td></tr>
+ <tr><td>NT</td><td>integer</td><td>2467</td></tr>
+ <tr><td>APTT</td><td>double</td><td>2549</td></tr>
+ <tr><td>FIB</td><td>integer</td><td>2567</td></tr>
+ <tr><td>SODIUM</td><td>integer</td><td>1282</td></tr>
+ <tr><td>POTASS</td><td>double</td><td>2008</td></tr>
+ <tr><td>CA</td><td>double</td><td>1276</td></tr>
+ <tr><td>PHOS</td><td>double</td><td>1242</td></tr>
+ <tr><td>MG</td><td>double</td><td>1869</td></tr>
+ <tr><td>CREA</td><td>double</td><td> 159</td></tr>
+ <tr><td>BUN</td><td>double</td><td> 172</td></tr>
+ <tr><td>HS</td><td>double</td><td>3061</td></tr>
+ <tr><td>GBIL</td><td>double</td><td>1441</td></tr>
+ <tr><td>TP</td><td>double</td><td>1583</td></tr>
+ <tr><td>ALB</td><td>double</td><td>1676</td></tr>
+ <tr><td>AMY</td><td>integer</td><td>3913</td></tr>
+ <tr><td>PAMY</td><td>integer</td><td>7114</td></tr>
+ <tr><td>LIP</td><td>integer</td><td>3699</td></tr>
+ <tr><td>CHE</td><td>double</td><td>2447</td></tr>
+ <tr><td>AP</td><td>integer</td><td>1400</td></tr>
+ <tr><td>ASAT</td><td>integer</td><td>1154</td></tr>
+ <tr><td>ALAT</td><td>integer</td><td> 987</td></tr>
+ <tr><td>GGT</td><td>integer</td><td>1262</td></tr>
+ <tr><td>LDH</td><td>integer</td><td>1714</td></tr>
+ <tr><td>CK</td><td>integer</td><td>2080</td></tr>
+ <tr><td>GLU</td><td>integer</td><td>4192</td></tr>
+ <tr><td>TRIG</td><td>integer</td><td>5061</td></tr>
+ <tr><td>CHOL</td><td>integer</td><td>5045</td></tr>
+ <tr><td>CRP</td><td>double</td><td> 155</td></tr>
+ <tr><td>BASOR</td><td>double</td><td> 732</td></tr>
+ <tr><td>EOSR</td><td>double</td><td> 732</td></tr>
+ <tr><td>LYMR</td><td>double</td><td> 732</td></tr>
+ <tr><td>MONOR</td><td>double</td><td> 732</td></tr>
+ <tr><td>NEU</td><td>double</td><td> 728</td></tr>
+ <tr><td>NEUR</td><td>double</td><td> 732</td></tr>
+ <tr><td>PDW</td><td>double</td><td>1102</td></tr>
+ <tr><td>RBC</td><td>double</td><td> 461</td></tr>
+ <tr><td>WBC</td><td>double</td><td> 462</td></tr>
+ <tr><td>BloodCulture</td><td>character</td><td>   0</td></tr>
+ </tbody></table>
+
+ <hr>
+
+</div>
+</section>
+<section id="updated-analysis-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="updated-analysis-dataset">Updated analysis dataset</h3>
+<p>Additional meta-data is added to the original <em>source</em> data set. We write this new modified (annotated) data set back to the <strong>data</strong> folder after adding additional meta-data for all variables. The meta-data is taken from the data dictionary.</p>
+<p>At the stage we could select the variables of interest to take in to the IDA phase by dropping variables we do not check in IDA.</p>
+<p>As a cross check we display the contents again to ensure the additional data is added, and then write the changes to the data folder in the file “data/a_bact.rda”.</p>
+<p>Input object size: 5119632 bytes; 53 variables 14691 observations New object size: 5159904 bytes; 53 variables 14691 observations Input object size: 5277552 bytes; 54 variables 14691 observations New object size: 5219544 bytes; 54 variables 14691 observations ::: {.cell-output-display}</p>
+<hr><h4 class="anchored">Data frame:a_bact</h4>14691 observations and 54 variables, maximum # NAs:7114  
+ <hr>
+ <style>
+ .hmisctable369284 {
+ border: 1px solid gray;
+ border-collapse: collapse;
+ font-size: 100%;
+ }
+ .hmisctable369284 td {
+ text-align: right;
+ padding: 0 1ex 0 1ex;
+ }
+ .hmisctable369284 th {
+ color: Black;
+ text-align: center;
+ padding: 0 1ex 0 1ex;
+ font-weight: bold;
+ }
+ </style>
+ <table class="hmisctable369284" border="1">
+ <tbody><tr><th>Name</th><th>Labels</th><th>Units</th><th>Class</th><th>Storage</th><th>NAs</th></tr>
+ <tr><td>ID</td><td>Patient Identification</td><td>1-14691</td><td>integer</td><td>integer</td><td>   0</td></tr>
+ <tr><td>SEX</td><td>Patient sex</td><td>1=male, 2=female</td><td>integer</td><td>integer</td><td>   0</td></tr>
+ <tr><td>AGE</td><td>Patient Age</td><td>years</td><td>integer</td><td>integer</td><td>   0</td></tr>
+ <tr><td>MCV</td><td>Mean corpuscular volume</td><td>pg</td><td>numeric</td><td>double</td><td>  42</td></tr>
+ <tr><td>HGB</td><td>Haemoglobin</td><td>G/L</td><td>numeric</td><td>double</td><td>  41</td></tr>
+ <tr><td>HCT</td><td>Haematocrit</td><td>%</td><td>numeric</td><td>double</td><td>  42</td></tr>
+ <tr><td>PLT</td><td>Blood platelets</td><td>G/L</td><td>integer</td><td>integer</td><td>  42</td></tr>
+ <tr><td>MCH</td><td>Mean corpuscular hemoglobin</td><td>fl</td><td>numeric</td><td>double</td><td>  42</td></tr>
+ <tr><td>MCHC</td><td>Mean corpuscular hemoglobin concentration</td><td>g/dl</td><td>numeric</td><td>double</td><td>  42</td></tr>
+ <tr><td>RDW</td><td>Red blood cell distribution width</td><td>%</td><td>numeric</td><td>double</td><td>  56</td></tr>
+ <tr><td>MPV</td><td>Mean platelet volume</td><td>fl</td><td>numeric</td><td>double</td><td> 702</td></tr>
+ <tr><td>LYM</td><td>Lymphocytes</td><td>G/L</td><td>numeric</td><td>double</td><td> 262</td></tr>
+ <tr><td>MONO</td><td>Monocytes</td><td>G/L</td><td>numeric</td><td>double</td><td> 246</td></tr>
+ <tr><td>EOS</td><td>Eosinophils</td><td>G/L</td><td>numeric</td><td>double</td><td> 135</td></tr>
+ <tr><td>BASO</td><td>Basophiles</td><td>G/L</td><td>numeric</td><td>double</td><td> 146</td></tr>
+ <tr><td>NT</td><td>Normotest</td><td>%</td><td>integer</td><td>integer</td><td>2467</td></tr>
+ <tr><td>APTT</td><td>Activated partial thromboplastin time</td><td>sec</td><td>numeric</td><td>double</td><td>2549</td></tr>
+ <tr><td>FIB</td><td>Fibrinogen</td><td>mg/dl</td><td>integer</td><td>integer</td><td>2567</td></tr>
+ <tr><td>SODIUM</td><td>Sodium</td><td>mmol/L</td><td>integer</td><td>integer</td><td>1282</td></tr>
+ <tr><td>POTASS</td><td>Potassium</td><td>mmol/L</td><td>numeric</td><td>double</td><td>2008</td></tr>
+ <tr><td>CA</td><td>Calcium</td><td>mmol/L</td><td>numeric</td><td>double</td><td>1276</td></tr>
+ <tr><td>PHOS</td><td>Phosphate</td><td>mmol/L</td><td>numeric</td><td>double</td><td>1242</td></tr>
+ <tr><td>MG</td><td>Magnesium</td><td>mmol/L</td><td>numeric</td><td>double</td><td>1869</td></tr>
+ <tr><td>CREA</td><td>Creatinine</td><td>mg/dl</td><td>numeric</td><td>double</td><td> 159</td></tr>
+ <tr><td>BUN</td><td>Blood urea nitrogen</td><td>mg/dl</td><td>numeric</td><td>double</td><td> 172</td></tr>
+ <tr><td>HS</td><td>Uric acid</td><td>mg/dl</td><td>numeric</td><td>double</td><td>3061</td></tr>
+ <tr><td>GBIL</td><td>Bilirubin</td><td>mg/dl</td><td>numeric</td><td>double</td><td>1441</td></tr>
+ <tr><td>TP</td><td>Total protein</td><td>G/L</td><td>numeric</td><td>double</td><td>1583</td></tr>
+ <tr><td>ALB</td><td>Albumin</td><td>G/L</td><td>numeric</td><td>double</td><td>1676</td></tr>
+ <tr><td>AMY</td><td>Amylase</td><td>U/L</td><td>integer</td><td>integer</td><td>3913</td></tr>
+ <tr><td>PAMY</td><td>Pancreas amylase</td><td>U/L</td><td>integer</td><td>integer</td><td>7114</td></tr>
+ <tr><td>LIP</td><td>Lipases</td><td>U/L</td><td>integer</td><td>integer</td><td>3699</td></tr>
+ <tr><td>CHE</td><td>Cholinesterase</td><td>kU/L</td><td>numeric</td><td>double</td><td>2447</td></tr>
+ <tr><td>AP</td><td>Alkaline phosphatase</td><td>U/L</td><td>integer</td><td>integer</td><td>1400</td></tr>
+ <tr><td>ASAT</td><td>Aspartate transaminase</td><td>U/L</td><td>integer</td><td>integer</td><td>1154</td></tr>
+ <tr><td>ALAT</td><td>Alanin transaminase</td><td>U/L</td><td>integer</td><td>integer</td><td> 987</td></tr>
+ <tr><td>GGT</td><td>Gamma-glutamyl transpeptidase</td><td>G/L</td><td>integer</td><td>integer</td><td>1262</td></tr>
+ <tr><td>LDH</td><td>Lactate dehydrogenase</td><td>U/L</td><td>integer</td><td>integer</td><td>1714</td></tr>
+ <tr><td>CK</td><td>Creatinine kinases</td><td>U/L</td><td>integer</td><td>integer</td><td>2080</td></tr>
+ <tr><td>GLU</td><td>Glucoses</td><td>mg/dl</td><td>integer</td><td>integer</td><td>4192</td></tr>
+ <tr><td>TRIG</td><td>Triclyceride</td><td>mg/dl</td><td>integer</td><td>integer</td><td>5061</td></tr>
+ <tr><td>CHOL</td><td>Cholesterol</td><td>mg/dl</td><td>integer</td><td>integer</td><td>5045</td></tr>
+ <tr><td>CRP</td><td>C-reactive protein</td><td>mg/dl</td><td>numeric</td><td>double</td><td> 155</td></tr>
+ <tr><td>BASOR</td><td>Basophile ratio</td><td>%</td><td>numeric</td><td>double</td><td> 732</td></tr>
+ <tr><td>EOSR</td><td>Eosinophil ratio</td><td>%</td><td>numeric</td><td>double</td><td> 732</td></tr>
+ <tr><td>LYMR</td><td>Lymphocyte ratio</td><td>% (mg/dl)</td><td>numeric</td><td>double</td><td> 732</td></tr>
+ <tr><td>MONOR</td><td>Monocyte ratio</td><td>%</td><td>numeric</td><td>double</td><td> 732</td></tr>
+ <tr><td>NEU</td><td>Neutrophiles</td><td>G/L</td><td>numeric</td><td>double</td><td> 728</td></tr>
+ <tr><td>NEUR</td><td>Neutrophile ratio</td><td>%</td><td>numeric</td><td>double</td><td> 732</td></tr>
+ <tr><td>PDW</td><td>Platelet distribution width</td><td>%</td><td>numeric</td><td>double</td><td>1102</td></tr>
+ <tr><td>RBC</td><td>Red blood count</td><td>T/L</td><td>numeric</td><td>double</td><td> 461</td></tr>
+ <tr><td>WBC</td><td>White blood count</td><td>G/L</td><td>numeric</td><td>double</td><td> 462</td></tr>
+ <tr><td>BloodCulture</td><td>Blood culture result for bacteremia</td><td>no, yes</td><td>character</td><td>character</td><td>   0</td></tr>
+ <tr><td>BC</td><td>bacteremia</td><td>0/1</td><td>integer</td><td>integer</td><td>   0</td></tr>
+ </tbody></table>
+
+ <hr>
+
+<p>:::</p>
+</section>
+</section>
+<section id="section-session-info" class="level2">
+<h2 class="anchored" data-anchor-id="section-session-info">Section session info</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.1.2 (2021-11-01)
+Platform: x86_64-apple-darwin17.0 (64-bit)
+Running under: macOS Big Sur 10.16
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices datasets  utils     methods   base     
+
+other attached packages:
+ [1] Hmisc_4.6-0     Formula_1.2-4   survival_3.2-13 lattice_0.20-45
+ [5] forcats_0.5.1   stringr_1.4.0   dplyr_1.0.9     purrr_0.3.4    
+ [9] readr_2.1.1     tidyr_1.2.0     tibble_3.1.7    ggplot2_3.3.6  
+[13] tidyverse_1.3.1 here_1.0.1     
+
+loaded via a namespace (and not attached):
+ [1] httr_1.4.2          jsonlite_1.7.2      splines_4.1.2      
+ [4] modelr_0.1.8        assertthat_0.2.1    latticeExtra_0.6-29
+ [7] renv_0.15.5         cellranger_1.1.0    pillar_1.7.0       
+[10] backports_1.4.1     glue_1.6.2          digest_0.6.29      
+[13] checkmate_2.1.0     RColorBrewer_1.1-3  rvest_1.0.2        
+[16] colorspace_2.0-3    htmltools_0.5.2     Matrix_1.3-4       
+[19] pkgconfig_2.0.3     broom_0.8.0         haven_2.4.3        
+[22] scales_1.2.0        jpeg_0.1-9          tzdb_0.2.0         
+[25] htmlTable_2.3.0     generics_0.1.2      ellipsis_0.3.2     
+[28] withr_2.5.0         nnet_7.3-16         cli_3.3.0          
+[31] magrittr_2.0.3      crayon_1.5.1        readxl_1.3.1       
+[34] evaluate_0.14       fs_1.5.2            fansi_1.0.3        
+[37] xml2_1.3.3          foreign_0.8-81      data.table_1.14.2  
+[40] tools_4.1.2         hms_1.1.1           lifecycle_1.0.1    
+[43] munsell_0.5.0       reprex_2.0.1        cluster_2.1.2      
+[46] compiler_4.1.2      rlang_1.0.3         grid_4.1.2         
+[49] rstudioapi_0.13     htmlwidgets_1.5.4   base64enc_0.1-3    
+[52] rmarkdown_2.11      gtable_0.3.0        DBI_1.1.2          
+[55] R6_2.5.1            gridExtra_2.3       lubridate_1.8.0    
+[58] knitr_1.37          fastmap_1.1.0       utf8_1.2.2         
+[61] rprojroot_2.0.2     stringi_1.7.6       Rcpp_1.0.8.3       
+[64] vctrs_0.4.1         rpart_4.1-15        png_0.1-7          
+[67] dbplyr_2.1.1        tidyselect_1.1.2    xfun_0.31          </code></pre>
+</div>
+</div>
+
+
+</section>
+</section>
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    setTimeout(function() {
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    window.tippy(el, {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    }); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</main>
+<div class="page-navigation ">
+  <div class="nav-page nav-page-previous">
+      <a href="./data_screen.html">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data screening and possible actions</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./Bact_SAP.html">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">IDA plan</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</div>
+</div> <!-- /main column -->
+</div> <!-- /row -->
+</div> <!-- /container fluid -->
+
+
+</body></html>

@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang=""><head>
+  <meta charset="utf-8">
+  <meta name="generator" content="quarto-0.2.232">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Regression without regrets - 5&nbsp; Missing data</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <script src="site_libs/quarto-nav/quarto-nav.js"></script>
+  <script src="site_libs/quarto-nav/headroom.min.js"></script>
+  <script src="site_libs/clipboard/clipboard.min.js"></script>
+  <meta name="quarto:offset" content="./">
+  <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+  <script src="site_libs/quarto-search/fuse.min.js"></script>
+  <script src="site_libs/quarto-search/quarto-search.js"></script>
+  <link href="./references.html" rel="next">
+  <link href="./Bact_SAP.html" rel="prev">
+  <script src="site_libs/quarto-html/quarto.js"></script>
+  <script src="site_libs/quarto-html/popper.min.js"></script>
+  <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+  <script src="site_libs/quarto-html/anchor.min.js"></script>
+  <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+  <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+  <script src="site_libs/bootstrap/bootstrap.min.js"></script>
+  <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+  <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <script id="quarto-search-options" type="application/json">{
+    "location": "sidebar",
+    "copy-button": false,
+    "collapse-after": 2,
+    "panel-placement": "start",
+    "type": "textbox",
+    "limit": 20
+  }</script>
+</head>
+<body>
+<div id="quarto-search-results"></div>
+<header id="quarto-header" class="headroom fixed-top">
+<nav class="quarto-secondary-nav py-2 d-lg-none d-md-block " data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <div class="container-fluid d-flex justify-content-between">
+    <h1 class="quarto-secondary-nav-title mb-0 fs-3 d-inline"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Missing data</span></h1>
+    <button type="button" class="quarto-btn-toggle btn d-lg-none py-0 px-1 d-inline-block border-0 ">
+      <i class="bi bi-chevron-right"></i>
+    </button>
+  </div>
+</nav>
+</header>
+ <!-- /navbar/sidebar -->
+<div class="container-fluid quarto-container d-flex flex-column page-layout-article" id="quarto-content">
+<div class="row flex-fill">
+  <div id="quarto-sidebar" class="col col-12 col-lg-3 d-lg-flex px-0 pt-0 sidebar collapse sidebar-navigation">
+    <nav class="ms-lg-auto floating overflow-auto">
+  <div class="px-3 pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Regression without regrets</a> 
+        <div class="sidebar-tools-main">
+</div>
+    </div>
+  </div>
+    <div class="px-3 mt-2 flex-shrink-0 align-items-center">
+      <div class="sidebar-search">
+      <div id="quarto-search" class="mb-0 " title="Search">
+</div>
+      </div>
+    </div>
+  <div class="sidebar-menu-container"> 
+  <ul class="list-unstyled mt-1 px-3">
+      <li class="sidebar-item">
+  <a href="./index.html" class="">Preface</a>
+</li>
+      <li class="sidebar-item">
+  <a href="./IDA_framework.html" class=""><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">IDA Framework</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./scope.html" class=""><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Scope of the regression analyses for the examples</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./data_screen.html" class=""><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data screening and possible actions</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./Bact_intro.html" class="">Bacteremia</a>
+</li>
+      <li class="sidebar-item">
+  <a href="./Bact_SAP.html" class=""><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">IDA plan</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./Bact_missing.html" class="active"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Missing data</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./references.html" class="">References</a>
+</li>
+  </ul>
+  </div>
+</nav>
+  </div>
+  <div id="quarto-toc-sidebar" class=" pt-0 col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
+<h2 id="toc-title">On this page</h2>
+<ul>
+<li><a href="#per-variable-missingness" class="nav-link active" data-scroll-target="#per-variable-missingness"> <span class="header-section-number">5.1</span> Per variable missingness</a></li>
+<li><a href="#missingness-patterns-over-variables" class="nav-link" data-scroll-target="#missingness-patterns-over-variables"> <span class="header-section-number">5.2</span> Missingness patterns over variables</a></li>
+<li><a href="#section-session-info" class="nav-link" data-scroll-target="#section-session-info"> <span class="header-section-number">5.3</span> Section session info</a></li>
+</ul>
+</nav></div>
+  <div class="col mx-auto col-sm-12 col-md-9 col-lg-7 col-xl-7 px-lg-4 pe-xxl-4 ps-xxl-3">
+<main>
+<header id="title-block-header">
+<h1 class="title d-none d-lg-block display-7"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Missing data</span></h1>
+</header>
+
+<div class="cell">
+
+</div>
+<section id="per-variable-missingness" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="per-variable-missingness"><span class="header-section-number">5.1</span> Per variable missingness</h2>
+<p>Number and percentage of missing.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="tsogpmajrd" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#tsogpmajrd .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#tsogpmajrd .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#tsogpmajrd .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#tsogpmajrd .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#tsogpmajrd .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#tsogpmajrd .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#tsogpmajrd .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#tsogpmajrd .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#tsogpmajrd .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#tsogpmajrd .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#tsogpmajrd .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#tsogpmajrd .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#tsogpmajrd .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#tsogpmajrd .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#tsogpmajrd .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#tsogpmajrd .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#tsogpmajrd .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#tsogpmajrd .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#tsogpmajrd .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#tsogpmajrd .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#tsogpmajrd .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#tsogpmajrd .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#tsogpmajrd .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#tsogpmajrd .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#tsogpmajrd .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#tsogpmajrd .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#tsogpmajrd .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#tsogpmajrd .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#tsogpmajrd .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#tsogpmajrd .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#tsogpmajrd .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#tsogpmajrd .gt_left {
+  text-align: left;
+}
+
+#tsogpmajrd .gt_center {
+  text-align: center;
+}
+
+#tsogpmajrd .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#tsogpmajrd .gt_font_normal {
+  font-weight: normal;
+}
+
+#tsogpmajrd .gt_font_bold {
+  font-weight: bold;
+}
+
+#tsogpmajrd .gt_font_italic {
+  font-style: italic;
+}
+
+#tsogpmajrd .gt_super {
+  font-size: 65%;
+}
+
+#tsogpmajrd .gt_two_val_uncert {
+  display: inline-block;
+  line-height: 1em;
+  text-align: right;
+  font-size: 60%;
+  vertical-align: -0.25em;
+  margin-left: 0.1em;
+}
+
+#tsogpmajrd .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+#tsogpmajrd .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#tsogpmajrd .gt_slash_mark {
+  font-size: 0.7em;
+  line-height: 0.7em;
+  vertical-align: 0.15em;
+}
+
+#tsogpmajrd .gt_fraction_numerator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: 0.45em;
+}
+
+#tsogpmajrd .gt_fraction_denominator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: -0.05em;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Variable</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1"><strong>Missing (count)</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1"><strong>Missing (%)</strong></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_left">PAMY</td>
+<td class="gt_row gt_right">7114</td>
+<td class="gt_row gt_right">48.42</td></tr>
+    <tr><td class="gt_row gt_left">TRIG</td>
+<td class="gt_row gt_right">5061</td>
+<td class="gt_row gt_right">34.45</td></tr>
+    <tr><td class="gt_row gt_left">CHOL</td>
+<td class="gt_row gt_right">5045</td>
+<td class="gt_row gt_right">34.34</td></tr>
+    <tr><td class="gt_row gt_left">GLU</td>
+<td class="gt_row gt_right">4192</td>
+<td class="gt_row gt_right">28.53</td></tr>
+    <tr><td class="gt_row gt_left">AMY</td>
+<td class="gt_row gt_right">3913</td>
+<td class="gt_row gt_right">26.64</td></tr>
+    <tr><td class="gt_row gt_left">LIP</td>
+<td class="gt_row gt_right">3699</td>
+<td class="gt_row gt_right">25.18</td></tr>
+    <tr><td class="gt_row gt_left">HS</td>
+<td class="gt_row gt_right">3061</td>
+<td class="gt_row gt_right">20.84</td></tr>
+    <tr><td class="gt_row gt_left">FIB</td>
+<td class="gt_row gt_right">2567</td>
+<td class="gt_row gt_right">17.47</td></tr>
+    <tr><td class="gt_row gt_left">APTT</td>
+<td class="gt_row gt_right">2549</td>
+<td class="gt_row gt_right">17.35</td></tr>
+    <tr><td class="gt_row gt_left">NT</td>
+<td class="gt_row gt_right">2467</td>
+<td class="gt_row gt_right">16.79</td></tr>
+    <tr><td class="gt_row gt_left">CHE</td>
+<td class="gt_row gt_right">2447</td>
+<td class="gt_row gt_right">16.66</td></tr>
+    <tr><td class="gt_row gt_left">CK</td>
+<td class="gt_row gt_right">2080</td>
+<td class="gt_row gt_right">14.16</td></tr>
+    <tr><td class="gt_row gt_left">POTASS</td>
+<td class="gt_row gt_right">2008</td>
+<td class="gt_row gt_right">13.67</td></tr>
+    <tr><td class="gt_row gt_left">MG</td>
+<td class="gt_row gt_right">1869</td>
+<td class="gt_row gt_right">12.72</td></tr>
+    <tr><td class="gt_row gt_left">LDH</td>
+<td class="gt_row gt_right">1714</td>
+<td class="gt_row gt_right">11.67</td></tr>
+    <tr><td class="gt_row gt_left">ALB</td>
+<td class="gt_row gt_right">1676</td>
+<td class="gt_row gt_right">11.41</td></tr>
+    <tr><td class="gt_row gt_left">TP</td>
+<td class="gt_row gt_right">1583</td>
+<td class="gt_row gt_right">10.78</td></tr>
+    <tr><td class="gt_row gt_left">GBIL</td>
+<td class="gt_row gt_right">1441</td>
+<td class="gt_row gt_right">9.81</td></tr>
+    <tr><td class="gt_row gt_left">AP</td>
+<td class="gt_row gt_right">1400</td>
+<td class="gt_row gt_right">9.53</td></tr>
+    <tr><td class="gt_row gt_left">SODIUM</td>
+<td class="gt_row gt_right">1282</td>
+<td class="gt_row gt_right">8.73</td></tr>
+    <tr><td class="gt_row gt_left">CA</td>
+<td class="gt_row gt_right">1276</td>
+<td class="gt_row gt_right">8.69</td></tr>
+    <tr><td class="gt_row gt_left">GGT</td>
+<td class="gt_row gt_right">1262</td>
+<td class="gt_row gt_right">8.59</td></tr>
+    <tr><td class="gt_row gt_left">PHOS</td>
+<td class="gt_row gt_right">1242</td>
+<td class="gt_row gt_right">8.45</td></tr>
+    <tr><td class="gt_row gt_left">ASAT</td>
+<td class="gt_row gt_right">1154</td>
+<td class="gt_row gt_right">7.86</td></tr>
+    <tr><td class="gt_row gt_left">PDW</td>
+<td class="gt_row gt_right">1102</td>
+<td class="gt_row gt_right">7.50</td></tr>
+    <tr><td class="gt_row gt_left">ALAT</td>
+<td class="gt_row gt_right">987</td>
+<td class="gt_row gt_right">6.72</td></tr>
+    <tr><td class="gt_row gt_left">BASOR</td>
+<td class="gt_row gt_right">732</td>
+<td class="gt_row gt_right">4.98</td></tr>
+    <tr><td class="gt_row gt_left">EOSR</td>
+<td class="gt_row gt_right">732</td>
+<td class="gt_row gt_right">4.98</td></tr>
+    <tr><td class="gt_row gt_left">LYMR</td>
+<td class="gt_row gt_right">732</td>
+<td class="gt_row gt_right">4.98</td></tr>
+    <tr><td class="gt_row gt_left">MONOR</td>
+<td class="gt_row gt_right">732</td>
+<td class="gt_row gt_right">4.98</td></tr>
+    <tr><td class="gt_row gt_left">NEUR</td>
+<td class="gt_row gt_right">732</td>
+<td class="gt_row gt_right">4.98</td></tr>
+    <tr><td class="gt_row gt_left">NEU</td>
+<td class="gt_row gt_right">728</td>
+<td class="gt_row gt_right">4.96</td></tr>
+    <tr><td class="gt_row gt_left">MPV</td>
+<td class="gt_row gt_right">702</td>
+<td class="gt_row gt_right">4.78</td></tr>
+    <tr><td class="gt_row gt_left">WBC</td>
+<td class="gt_row gt_right">462</td>
+<td class="gt_row gt_right">3.14</td></tr>
+    <tr><td class="gt_row gt_left">RBC</td>
+<td class="gt_row gt_right">461</td>
+<td class="gt_row gt_right">3.14</td></tr>
+    <tr><td class="gt_row gt_left">LYM</td>
+<td class="gt_row gt_right">262</td>
+<td class="gt_row gt_right">1.78</td></tr>
+    <tr><td class="gt_row gt_left">MONO</td>
+<td class="gt_row gt_right">246</td>
+<td class="gt_row gt_right">1.67</td></tr>
+    <tr><td class="gt_row gt_left">BUN_CREA</td>
+<td class="gt_row gt_right">174</td>
+<td class="gt_row gt_right">1.18</td></tr>
+    <tr><td class="gt_row gt_left">BUN</td>
+<td class="gt_row gt_right">172</td>
+<td class="gt_row gt_right">1.17</td></tr>
+    <tr><td class="gt_row gt_left">CREA</td>
+<td class="gt_row gt_right">159</td>
+<td class="gt_row gt_right">1.08</td></tr>
+    <tr><td class="gt_row gt_left">eGFR</td>
+<td class="gt_row gt_right">159</td>
+<td class="gt_row gt_right">1.08</td></tr>
+    <tr><td class="gt_row gt_left">CRP</td>
+<td class="gt_row gt_right">155</td>
+<td class="gt_row gt_right">1.06</td></tr>
+    <tr><td class="gt_row gt_left">BASO</td>
+<td class="gt_row gt_right">146</td>
+<td class="gt_row gt_right">0.99</td></tr>
+    <tr><td class="gt_row gt_left">EOS</td>
+<td class="gt_row gt_right">135</td>
+<td class="gt_row gt_right">0.92</td></tr>
+    <tr><td class="gt_row gt_left">RDW</td>
+<td class="gt_row gt_right">56</td>
+<td class="gt_row gt_right">0.38</td></tr>
+    <tr><td class="gt_row gt_left">MCV</td>
+<td class="gt_row gt_right">42</td>
+<td class="gt_row gt_right">0.29</td></tr>
+    <tr><td class="gt_row gt_left">HCT</td>
+<td class="gt_row gt_right">42</td>
+<td class="gt_row gt_right">0.29</td></tr>
+    <tr><td class="gt_row gt_left">PLT</td>
+<td class="gt_row gt_right">42</td>
+<td class="gt_row gt_right">0.29</td></tr>
+    <tr><td class="gt_row gt_left">MCH</td>
+<td class="gt_row gt_right">42</td>
+<td class="gt_row gt_right">0.29</td></tr>
+    <tr><td class="gt_row gt_left">MCHC</td>
+<td class="gt_row gt_right">42</td>
+<td class="gt_row gt_right">0.29</td></tr>
+    <tr><td class="gt_row gt_left">HGB</td>
+<td class="gt_row gt_right">41</td>
+<td class="gt_row gt_right">0.28</td></tr>
+    <tr><td class="gt_row gt_left">SEX</td>
+<td class="gt_row gt_right">0</td>
+<td class="gt_row gt_right">0.00</td></tr>
+    <tr><td class="gt_row gt_left">AGE</td>
+<td class="gt_row gt_right">0</td>
+<td class="gt_row gt_right">0.00</td></tr>
+    <tr><td class="gt_row gt_left">BloodCulture</td>
+<td class="gt_row gt_right">0</td>
+<td class="gt_row gt_right">0.00</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+<p>Investigate for groups of variables:</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="sxteueuxyz" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#sxteueuxyz .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#sxteueuxyz .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#sxteueuxyz .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#sxteueuxyz .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#sxteueuxyz .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#sxteueuxyz .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#sxteueuxyz .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#sxteueuxyz .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#sxteueuxyz .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#sxteueuxyz .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#sxteueuxyz .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#sxteueuxyz .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#sxteueuxyz .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#sxteueuxyz .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#sxteueuxyz .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#sxteueuxyz .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#sxteueuxyz .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sxteueuxyz .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#sxteueuxyz .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#sxteueuxyz .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sxteueuxyz .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#sxteueuxyz .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#sxteueuxyz .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#sxteueuxyz .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sxteueuxyz .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#sxteueuxyz .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#sxteueuxyz .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#sxteueuxyz .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#sxteueuxyz .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-left: 4px;
+  padding-right: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sxteueuxyz .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#sxteueuxyz .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#sxteueuxyz .gt_left {
+  text-align: left;
+}
+
+#sxteueuxyz .gt_center {
+  text-align: center;
+}
+
+#sxteueuxyz .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#sxteueuxyz .gt_font_normal {
+  font-weight: normal;
+}
+
+#sxteueuxyz .gt_font_bold {
+  font-weight: bold;
+}
+
+#sxteueuxyz .gt_font_italic {
+  font-style: italic;
+}
+
+#sxteueuxyz .gt_super {
+  font-size: 65%;
+}
+
+#sxteueuxyz .gt_two_val_uncert {
+  display: inline-block;
+  line-height: 1em;
+  text-align: right;
+  font-size: 60%;
+  vertical-align: -0.25em;
+  margin-left: 0.1em;
+}
+
+#sxteueuxyz .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 75%;
+  vertical-align: 0.4em;
+}
+
+#sxteueuxyz .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#sxteueuxyz .gt_slash_mark {
+  font-size: 0.7em;
+  line-height: 0.7em;
+  vertical-align: 0.15em;
+}
+
+#sxteueuxyz .gt_fraction_numerator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: 0.45em;
+}
+
+#sxteueuxyz .gt_fraction_denominator {
+  font-size: 0.6em;
+  line-height: 0.6em;
+  vertical-align: -0.05em;
+}
+</style>
+<table class="gt_table">
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Variable</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1"><strong>Missing (count)</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1"><strong>Missing (%)</strong></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_left">Any_Variable_missing</td>
+<td class="gt_row gt_right">10712</td>
+<td class="gt_row gt_right">72.92</td></tr>
+    <tr><td class="gt_row gt_left">Any_remaining_missing</td>
+<td class="gt_row gt_right">10587</td>
+<td class="gt_row gt_right">72.06</td></tr>
+    <tr><td class="gt_row gt_left">Any_key_structural_leuko_kidney_acute_missing</td>
+<td class="gt_row gt_right">5306</td>
+<td class="gt_row gt_right">36.12</td></tr>
+    <tr><td class="gt_row gt_left">Any_Acute_missing</td>
+<td class="gt_row gt_right">3139</td>
+<td class="gt_row gt_right">21.37</td></tr>
+    <tr><td class="gt_row gt_left">Any_Kidney_missing</td>
+<td class="gt_row gt_right">2065</td>
+<td class="gt_row gt_right">14.06</td></tr>
+    <tr><td class="gt_row gt_left">Any_key_structural_missing</td>
+<td class="gt_row gt_right">898</td>
+<td class="gt_row gt_right">6.11</td></tr>
+    <tr><td class="gt_row gt_left">Any_Leuko_missing</td>
+<td class="gt_row gt_right">728</td>
+<td class="gt_row gt_right">4.96</td></tr>
+    <tr><td class="gt_row gt_left">Any_Demographics_missing</td>
+<td class="gt_row gt_right">0</td>
+<td class="gt_row gt_right">0.00</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+</div>
+<p>From this table we learn that as long as we model with only VIPs or with leukocyte-related variables, we can expect less than 10% missing values and this may justify a complete-case analysis. Including also kidney- and acute phase related variables will raise the proportion of missing values to about 36% which leads to a significant drop in power. A multiple imputation may then recover a lot of the information and may in particular be beneficial to keep the power of the (otherwise very complete) VIPs.</p>
+</section>
+<section id="missingness-patterns-over-variables" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="missingness-patterns-over-variables"><span class="header-section-number">5.2</span> Missingness patterns over variables</h2>
+<p>First we create a dendogram that shows which variables tend to be missing together:</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="Bact_missing_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Furthermore, with variables missing in more than 10% of the cases, we create a heatmap that simultaneously shows the clusters of patients with missing values and the variables:</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="Bact_missing_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>In this heatmap, we see that CHOL and TRIG are always missing together (lowest hierarchy in dendogram), but there are no further such pairs among any other variables. There is also some evidence that when CHOL and TRIG are missing, also PAMY is missing, although this is not the case for a small proportion of patients. The big white space in the middle of the heatmap represents the approx. 30% of patients with no missing values in those variables.</p>
+</section>
+<section id="section-session-info" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="section-session-info"><span class="header-section-number">5.3</span> Section session info</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.1.2 (2021-11-01)
+Platform: x86_64-apple-darwin17.0 (64-bit)
+Running under: macOS Big Sur 10.16
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices datasets  utils     methods   base     
+
+other attached packages:
+ [1] DT_0.20          kableExtra_1.3.4 gt_0.6.0         naniar_0.6.1    
+ [5] Hmisc_4.6-0      Formula_1.2-4    survival_3.2-13  lattice_0.20-45 
+ [9] forcats_0.5.1    stringr_1.4.0    dplyr_1.0.9      purrr_0.3.4     
+[13] readr_2.1.1      tidyr_1.2.0      tibble_3.1.7     ggplot2_3.3.6   
+[17] tidyverse_1.3.1  here_1.0.1      
+
+loaded via a namespace (and not attached):
+ [1] fs_1.5.2            lubridate_1.8.0     webshot_0.5.2      
+ [4] RColorBrewer_1.1-3  httr_1.4.2          rprojroot_2.0.2    
+ [7] tools_4.1.2         backports_1.4.1     utf8_1.2.2         
+[10] R6_2.5.1            rpart_4.1-15        DBI_1.1.2          
+[13] colorspace_2.0-3    nnet_7.3-16         withr_2.5.0        
+[16] tidyselect_1.1.2    gridExtra_2.3       compiler_4.1.2     
+[19] cli_3.3.0           rvest_1.0.2         htmlTable_2.3.0    
+[22] xml2_1.3.3          sass_0.4.1          scales_1.2.0       
+[25] checkmate_2.1.0     commonmark_1.8.0    systemfonts_1.0.3  
+[28] digest_0.6.29       foreign_0.8-81      rmarkdown_2.11     
+[31] svglite_2.0.0       base64enc_0.1-3     jpeg_0.1-9         
+[34] pkgconfig_2.0.3     htmltools_0.5.2     dbplyr_2.1.1       
+[37] fastmap_1.1.0       htmlwidgets_1.5.4   rlang_1.0.3        
+[40] readxl_1.3.1        rstudioapi_0.13     generics_0.1.2     
+[43] jsonlite_1.7.2      magrittr_2.0.3      Matrix_1.3-4       
+[46] Rcpp_1.0.8.3        munsell_0.5.0       fansi_1.0.3        
+[49] lifecycle_1.0.1     visdat_0.5.3        stringi_1.7.6      
+[52] grid_4.1.2          crayon_1.5.1        haven_2.4.3        
+[55] splines_4.1.2       hms_1.1.1           knitr_1.37         
+[58] pillar_1.7.0        reprex_2.0.1        glue_1.6.2         
+[61] evaluate_0.14       latticeExtra_0.6-29 data.table_1.14.2  
+[64] renv_0.15.5         modelr_0.1.8        png_0.1-7          
+[67] vctrs_0.4.1         tzdb_0.2.0          cellranger_1.1.0   
+[70] gtable_0.3.0        assertthat_0.2.1    xfun_0.31          
+[73] broom_0.8.0         viridisLite_0.4.0   cluster_2.1.2      
+[76] ellipsis_0.3.2     </code></pre>
+</div>
+</div>
+
+
+</section>
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    setTimeout(function() {
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    window.tippy(el, {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    }); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</main>
+<div class="page-navigation ">
+  <div class="nav-page nav-page-previous">
+      <a href="./Bact_SAP.html">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">IDA plan</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./references.html">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</div>
+</div> <!-- /main column -->
+</div> <!-- /row -->
+</div> <!-- /container fluid -->
+
+
+</body></html>
