@@ -1,0 +1,51 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Regression without regrets",
+    "section": "",
+    "text": "Preface\nThe focus of this document/website is to provide guidance on conducting initial data analysis in a reproducible manner in the context of intended regression analyses."
+  },
+  {
+    "objectID": "IDA_framework.html",
+    "href": "IDA_framework.html",
+    "title": "1  IDA Framework",
+    "section": "",
+    "text": "The IDA framework consists of six steps Huebner, Vach, and le Cessie (2016) (figure 1).\nHere we assume that metadata (step I) exist in sufficient detail, and that data cleaning (step II) was already performed. Metadata summarize background information about the data to properly conduct IDA steps, and a data cleaning process identifies and corrects technical errors. The data screening (step III) examines data properties to inform decisions about the intended analysis. Initial data reporting (step IV) document insight of the previous steps and can be referred to when interpreting results from the regression modeling. Consequences of these analyses can be that the analysis plan needs to be refined or updated (step V). Finally, reporting of IDA results in research papers (step VI) are necessary to ensure transparency regarding key findings that influence the analysis or interpretation of results. Further details about the elements of IDA are discussed in Huebner et al. (2020).\n\n\n\nIDA framework, see Huebner, Vach, and le Cessie (2016)\n\n\nHuebner M, Vach W, le Cessie S, Schmidt C, Lusa L. Hidden Analyses: a review of reporting practice and recommendations for more transparent reporting of initial data analyses. BMC Med Res Meth 2020; 20:61. Link\n\n\n\n\nHuebner, Marianne, Werner Vach, and Saskia le Cessie. 2016. “A Systematic Approach to Initial Data Analysis Is Good Research Practice.” The Journal of Thoracic and Cardiovascular Surgery 151 (1): 25–27. https://doi.org/https://doi.org/10.1016/j.jtcvs.2015.09.085.\n\n\nHuebner, Marianne, and Werner Vach, Saskia le Cessie, Carsten Oliver Schmidt, and Lara Lusa. 2020. “Hidden Analyses: A Review of Reporting Practice and Recommendations for More Transparent Reporting of Initial Data Analyses.” BMC Medical Research Methodology 20 (1). https://doi.org/10.1186/s12874-020-00942-y."
+  },
+  {
+    "objectID": "scope.html",
+    "href": "scope.html",
+    "title": "2  Scope of the regression analyses for the examples",
+    "section": "",
+    "text": "Regression models can be used for a wide range of purposes, for the purpose of these examples the assumptions on the regression analysis set-up in this paper are listed in Table 1. Thus, IDA tasks will be explained in a well-defined, practically relevant setting. Since a key principle is that IDA does not touch the research question no associations between dependent (outcome) and independent (non-outcome) variables are considered.\nTable 1: The scope of the regression analyses considered for IDA tasks\n\n\n\n\n\n\n\n\nAspects of the research plan\nAssumptions in this paper\nReason for the assumption\n\n\n\n\nDependent (outcome) variable\nOne dependent variable that can be continuous or binary; exclude time-to-event or longitudinal outcomes\nExplain IDA tasks in a well-defined, practically relevant setting\n\n\nRegression models\nModels with linear predictors\nExplain IDA tasks in a well-defined, practically relevant setting\n\n\nPurpose of regression model\nAdjust effect of one variable of interest for confounders; quantify the effects of explanatory variables on the outcome\nExplain IDA tasks in a well-defined, practically relevant setting\n\n\nIndependent variables\n“explanatory” or “confounder” depending on purpose of model; small to moderate number of mixed types; Not high dimensional; no repeated measurements\nTo demonstrate IDA approaches for a mix of variables likely to be encountered in practice\n\n\nStatistical analysis plan\nExists, defines the outcome variable, the type of regression model to be used, and a set of independent variables\nIDA does not touch the research question, but may lead to an update or refinement of the analysis plan\n\n\n\nReferences:\nVach W. Regression Models as a Tool in Medical Research. Chapman/Hall CRC 2012\nHarrell FE. Regression Modeling Strategies. Springer (2nd ed) 2015\nRoyston P and Sauerbrei W. Multivariable Model Building. Wiley (2008)\n[…]"
+  },
+  {
+    "objectID": "data_screen.html#univariate-distributions",
+    "href": "data_screen.html#univariate-distributions",
+    "title": "3  Data screening and possible actions",
+    "section": "3.1 Univariate distributions",
+    "text": "What to look at\nPossible actions: Interpretation\nPossible actions: SAP\nPossible actions: Presentation\n\n\n\n\nContinuous variables\nGeneral skewness\nHelp in interpreting results\nUpdate SAP\nUpdate intended presentation of results\n\n\nContinuous variables\nGeneral skewness\nWide CI for coefficients\nUse variable as log-transformed\nUpdate intended presentation of results\n\n\nContinuous variables\nOutliers\nDisproportional impact on results\nWinsorize or transform\nModel involves winsorization\n\n\nContinuous variables\nSpike at 0\nNarrow CI at 0\nUse appropriate representation of variable in model\nUse 2 (or more) coefficients to distinguish 0 from non-0 continuous part\n\n\nCategorical variables\nFrequencies\nComparisons to default reference probably irrelevant\nChange reference category\nContrasts compare to (new) reference category\n\n\nCategorical variables\nRare categories\nWide CI for coefficients\nCollapse/exclude\nFewer categories to present\n\n\nCategorical variables\nOne very frequent category\nComparisons irrelevant?\nExclude variable\nVariable omitted"
+  },
+  {
+    "objectID": "data_screen.html#bivariate-distributions",
+    "href": "data_screen.html#bivariate-distributions",
+    "title": "3  Data screening and possible actions",
+    "section": "3.2 Bivariate distributions",
+    "text": "What to look at\nPossible actions: Interpretation\nPossible actions: SAP\nPossible actions: Presentation\n\n\n\n\nContinuous by continuous\nOutliers (from the cloud)\nDisproportional impact on results\nWinsorize or transform\nModel involves winsorization\n\n\nContinuous by continuous\nCorrelations\nWide CI for coefficients\nWinsorize or transform\nModel involves winsorization\n\n\nContinuous by categorical\nOutliers (only visible in bivariate plot)\nWide CI for coefficients\n\n\n\n\nCategorical by categorical\nFrequent/rare combinations\nComparison to default reference irrelevant\nChange reference category\nContrasts compare to (new) reference category\n\n\nCategorical by categorical\nFrequent/rare combinations\ninteractions relevant?\nRemove interaction from model\nFewer interactions to present"
+  },
+  {
+    "objectID": "data_screen.html#missing-values",
+    "href": "data_screen.html#missing-values",
+    "title": "3  Data screening and possible actions",
+    "section": "3.3 Missing values",
+    "text": "What to look at\nPossible actions: Interpretation\nPossible actions: SAP\nPossible actions: Presentation\n\n\n\n\nPer variable\nNumber and proportion\nWide CI for coefficients\nRemove variable if many missing values\n\n\n\nPattern\nVariables missing independently or together\n\nOmit variables together\nChanges model\n\n\nPattern\nVariables missing dependent on levels of other variables\nSystematic missingness? Model still based on representative?\nIPW needed?\nWeighted analysis\n\n\nComplete cases\nNumber and proportion\nFew cases left for main CCO analysis\nMultiple imputation (or other way of dealing with missing values)?\nResult from MI analysis? Or applicability restricted to a subpopulation?\n\n\n\nReferences\nHuebner M, le Cessie S, Schmidt CO, Vach W . A contemporary conceptual framework for initial data analysis. Observational Studies 2018; 4: 171-192. Link\nHarrell FE. Regression Modeling Strategies. Springer (2nd ed) 2015\n[…]"
+  },
+  {
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "References",
+    "section": "",
+    "text": "Huebner, Marianne, Werner Vach, and Saskia le Cessie. 2016. “A Systematic Approach to Initial Data Analysis Is Good Research Practice.” The Journal of Thoracic and Cardiovascular Surgery 151 (1): 25–27. https://doi.org/https://doi.org/10.1016/j.jtcvs.2015.09.085.\n\n\nHuebner, Marianne, and Werner Vach, Saskia le Cessie, Carsten Oliver Schmidt, and Lara Lusa. 2020. “Hidden Analyses: A Review of Reporting Practice and Recommendations for More Transparent Reporting of Initial Data Analyses.” BMC Medical Research Methodology 20 (1). https://doi.org/10.1186/s12874-020-00942-y."
+  }
+]

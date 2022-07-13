@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang=""><head>
+  <meta charset="utf-8">
+  <meta name="generator" content="quarto-0.2.232">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Regression without regrets - 3&nbsp; Data screening and possible actions</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <script src="site_libs/quarto-nav/quarto-nav.js"></script>
+  <script src="site_libs/quarto-nav/headroom.min.js"></script>
+  <script src="site_libs/clipboard/clipboard.min.js"></script>
+  <meta name="quarto:offset" content="./">
+  <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+  <script src="site_libs/quarto-search/fuse.min.js"></script>
+  <script src="site_libs/quarto-search/quarto-search.js"></script>
+  <link href="./references.html" rel="next">
+  <link href="./scope.html" rel="prev">
+  <script src="site_libs/quarto-html/quarto.js"></script>
+  <script src="site_libs/quarto-html/popper.min.js"></script>
+  <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+  <script src="site_libs/quarto-html/anchor.min.js"></script>
+  <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+  <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+  <script src="site_libs/bootstrap/bootstrap.min.js"></script>
+  <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+  <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <script id="quarto-search-options" type="application/json">{
+    "location": "sidebar",
+    "copy-button": false,
+    "collapse-after": 2,
+    "panel-placement": "start",
+    "type": "textbox",
+    "limit": 20
+  }</script>
+</head>
+<body>
+<div id="quarto-search-results"></div>
+<header id="quarto-header" class="headroom fixed-top">
+<nav class="quarto-secondary-nav py-2 d-lg-none d-md-block " data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <div class="container-fluid d-flex justify-content-between">
+    <h1 class="quarto-secondary-nav-title mb-0 fs-3 d-inline"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data screening and possible actions</span></h1>
+    <button type="button" class="quarto-btn-toggle btn d-lg-none py-0 px-1 d-inline-block border-0 ">
+      <i class="bi bi-chevron-right"></i>
+    </button>
+  </div>
+</nav>
+</header>
+ <!-- /navbar/sidebar -->
+<div class="container-fluid quarto-container d-flex flex-column page-layout-article" id="quarto-content">
+<div class="row flex-fill">
+  <div id="quarto-sidebar" class="col col-12 col-lg-3 d-lg-flex px-0 pt-0 sidebar collapse sidebar-navigation">
+    <nav class="ms-lg-auto floating overflow-auto">
+  <div class="px-3 pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Regression without regrets</a> 
+        <div class="sidebar-tools-main">
+</div>
+    </div>
+  </div>
+    <div class="px-3 mt-2 flex-shrink-0 align-items-center">
+      <div class="sidebar-search">
+      <div id="quarto-search" class="mb-0 " title="Search">
+</div>
+      </div>
+    </div>
+  <div class="sidebar-menu-container"> 
+  <ul class="list-unstyled mt-1 px-3">
+      <li class="sidebar-item">
+  <a href="./index.html" class="">Preface</a>
+</li>
+      <li class="sidebar-item">
+  <a href="./IDA_framework.html" class=""><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">IDA Framework</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./scope.html" class=""><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Scope of the regression analyses for the examples</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./data_screen.html" class="active"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data screening and possible actions</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./references.html" class="">References</a>
+</li>
+  </ul>
+  </div>
+</nav>
+  </div>
+  <div id="quarto-toc-sidebar" class=" pt-0 col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
+<h2 id="toc-title">On this page</h2>
+<ul>
+<li><a href="#univariate-distributions" class="nav-link active" data-scroll-target="#univariate-distributions"> <span class="header-section-number">3.1</span> Univariate distributions</a></li>
+<li><a href="#bivariate-distributions" class="nav-link" data-scroll-target="#bivariate-distributions"> <span class="header-section-number">3.2</span> Bivariate distributions</a></li>
+<li><a href="#missing-values" class="nav-link" data-scroll-target="#missing-values"> <span class="header-section-number">3.3</span> Missing values</a></li>
+</ul>
+</nav></div>
+  <div class="col mx-auto col-sm-12 col-md-9 col-lg-7 col-xl-7 px-lg-4 pe-xxl-4 ps-xxl-3">
+<main>
+<header id="title-block-header">
+<h1 class="title d-none d-lg-block display-7"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data screening and possible actions</span></h1>
+</header>
+
+<section id="univariate-distributions" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="univariate-distributions"><span class="header-section-number">3.1</span> Univariate distributions</h2>
+<table class="table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>What to look at</th>
+<th>Possible actions: Interpretation</th>
+<th>Possible actions: SAP</th>
+<th>Possible actions: Presentation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Continuous variables</td>
+<td>General skewness</td>
+<td>Help in interpreting results</td>
+<td>Update SAP</td>
+<td>Update intended presentation of results</td>
+</tr>
+<tr class="even">
+<td>Continuous variables</td>
+<td>General skewness</td>
+<td>Wide CI for coefficients</td>
+<td>Use variable as log-transformed</td>
+<td>Update intended presentation of results</td>
+</tr>
+<tr class="odd">
+<td>Continuous variables</td>
+<td>Outliers</td>
+<td>Disproportional impact on results</td>
+<td>Winsorize or transform</td>
+<td>Model involves winsorization</td>
+</tr>
+<tr class="even">
+<td>Continuous variables</td>
+<td>Spike at 0</td>
+<td>Narrow CI at 0</td>
+<td>Use appropriate representation of variable in model</td>
+<td>Use 2 (or more) coefficients to distinguish 0 from non-0 continuous part</td>
+</tr>
+<tr class="odd">
+<td>Categorical variables</td>
+<td>Frequencies</td>
+<td>Comparisons to default reference probably irrelevant</td>
+<td>Change reference category</td>
+<td>Contrasts compare to (new) reference category</td>
+</tr>
+<tr class="even">
+<td>Categorical variables</td>
+<td>Rare categories</td>
+<td>Wide CI for coefficients</td>
+<td>Collapse/exclude</td>
+<td>Fewer categories to present</td>
+</tr>
+<tr class="odd">
+<td>Categorical variables</td>
+<td>One very frequent category</td>
+<td>Comparisons irrelevant?</td>
+<td>Exclude variable</td>
+<td>Variable omitted</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="bivariate-distributions" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="bivariate-distributions"><span class="header-section-number">3.2</span> Bivariate distributions</h2>
+<table class="table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>What to look at</th>
+<th>Possible actions: Interpretation</th>
+<th>Possible actions: SAP</th>
+<th>Possible actions: Presentation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Continuous by continuous</td>
+<td>Outliers (from the cloud)</td>
+<td>Disproportional impact on results</td>
+<td>Winsorize or transform</td>
+<td>Model involves winsorization</td>
+</tr>
+<tr class="even">
+<td>Continuous by continuous</td>
+<td>Correlations</td>
+<td>Wide CI for coefficients</td>
+<td>Winsorize or transform</td>
+<td>Model involves winsorization</td>
+</tr>
+<tr class="odd">
+<td>Continuous by categorical</td>
+<td>Outliers (only visible in bivariate plot)</td>
+<td>Wide CI for coefficients</td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Categorical by categorical</td>
+<td>Frequent/rare combinations</td>
+<td>Comparison to default reference irrelevant</td>
+<td>Change reference category</td>
+<td>Contrasts compare to (new) reference category</td>
+</tr>
+<tr class="odd">
+<td>Categorical by categorical</td>
+<td>Frequent/rare combinations</td>
+<td>interactions relevant?</td>
+<td>Remove interaction from model</td>
+<td>Fewer interactions to present</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="missing-values" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="missing-values"><span class="header-section-number">3.3</span> Missing values</h2>
+<table class="table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>What to look at</th>
+<th>Possible actions: Interpretation</th>
+<th>Possible actions: SAP</th>
+<th>Possible actions: Presentation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Per variable</td>
+<td>Number and proportion</td>
+<td>Wide CI for coefficients</td>
+<td>Remove variable if many missing values</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Pattern</td>
+<td>Variables missing independently or together</td>
+<td></td>
+<td>Omit variables together</td>
+<td>Changes model</td>
+</tr>
+<tr class="odd">
+<td>Pattern</td>
+<td>Variables missing dependent on levels of other variables</td>
+<td>Systematic missingness? Model still based on representative?</td>
+<td>IPW needed?</td>
+<td>Weighted analysis</td>
+</tr>
+<tr class="even">
+<td>Complete cases</td>
+<td>Number and proportion</td>
+<td>Few cases left for main CCO analysis</td>
+<td>Multiple imputation (or other way of dealing with missing values)?</td>
+<td>Result from MI analysis? Or applicability restricted to a subpopulation?</td>
+</tr>
+</tbody>
+</table>
+<p><strong>References</strong></p>
+<p>Huebner M, le Cessie S, Schmidt CO, Vach W . A contemporary conceptual framework for initial data analysis. Observational Studies 2018; 4: 171-192. Link</p>
+<p>Harrell FE. Regression Modeling Strategies. Springer (2nd ed) 2015</p>
+<p>[…]</p>
+
+
+</section>
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    setTimeout(function() {
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    window.tippy(el, {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    }); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</main>
+<div class="page-navigation ">
+  <div class="nav-page nav-page-previous">
+      <a href="./scope.html">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Scope of the regression analyses for the examples</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./references.html">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</div>
+</div> <!-- /main column -->
+</div> <!-- /row -->
+</div> <!-- /container fluid -->
+
+
+</body></html>
