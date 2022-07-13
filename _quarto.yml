@@ -11,6 +11,9 @@ book:
     - IDA_framework.qmd
     - scope.qmd
     - data_screen.qmd
+    - Bact_intro.qmd
+    - Bact_SAP.qmd
+    - Bact_missing.qmd
     - references.qmd
 
 bibliography: references.bib
