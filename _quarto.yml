@@ -17,5 +17,7 @@ format:
   html:
     theme: cosmo
 
+execute:
+  freeze: auto
 
 
