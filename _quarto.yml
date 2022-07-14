@@ -2,6 +2,10 @@ project:
   type: book
   output-dir: _site
 
+execute:
+  echo: false
+  freeze: true
+
 book:
   title: "Regression without regrets"
   author: "S. Hödlmoser, M. Baillie, G. Heinze & M. Huebner"
@@ -11,13 +15,12 @@ book:
     - IDA_framework.qmd
     - scope.qmd
     - data_screen.qmd
-    - part: Bact_intro.qmd
-      chapters:
-      - Bact_SAP.qmd
-      - Bact_missing.qmd
-      - Bact_univar.qmd ## long running jobs - use ARd or freeze
-      - Bact_multivar.qmd
-    #  - Bact_suppl.qmd
+    - Bact_intro.qmd
+    - Bact_SAP.qmd
+    - Bact_missing.qmd
+    #- Bact_univar.qmd ## long running jobs - use ARd or freeze
+    #- Bact_multivar.qmd
+    #- Bact_suppl.qmd
     - references.qmd
 
 bibliography: references.bib
@@ -25,6 +28,7 @@ bibliography: references.bib
 format:
   html:
     theme: cosmo
-
-execute:
-  freeze: auto
+    toc: true
+    code-fold: true
+    code-summary: "Show the code"
+    
