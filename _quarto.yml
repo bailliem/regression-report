@@ -4,7 +4,7 @@ project:
 
 book:
   title: "Regression without regrets"
-  author: "M. Baillie, G. Heinze & M. Huebner"
+  author: "S. Hödlmoser, M. Baillie, G. Heinze & M. Huebner"
   date: "7/13/2022"
   chapters:
     - index.qmd
