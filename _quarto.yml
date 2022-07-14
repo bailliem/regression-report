@@ -3,8 +3,8 @@ project:
   output-dir: _site
 
 execute:
-  echo: false
   freeze: true
+  echo: false
 
 book:
   title: "Regression without regrets"
