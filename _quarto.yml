@@ -4,7 +4,7 @@ project:
 
 book:
   title: "Regression without regrets"
-  author: "M. Baillie, G. Heinze & M. Huebner"
+  author: "S. Hödlmoser, M. Baillie, G. Heinze & M. Huebner"
   date: "7/13/2022"
   chapters:
     - index.qmd
@@ -15,9 +15,9 @@ book:
       chapters:
       - Bact_SAP.qmd
       - Bact_missing.qmd
-    #- Bact_univar.qmd ## long running jobs - use ARd or freeze
+      - Bact_univar.qmd ## long running jobs - use ARd or freeze
     #- Bact_multivar.qmd
-    #- Bact_suppl.qmd
+    #  - Bact_suppl.qmd
     - references.qmd
 
 bibliography: references.bib
