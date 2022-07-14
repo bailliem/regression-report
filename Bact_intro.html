@@ -3,7 +3,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="quarto-0.2.232">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Regression without regrets - Bacteremia</title>
+  <title>Regression without regrets - 4&nbsp; Bacteremia</title>
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -48,7 +48,7 @@
 <header id="quarto-header" class="headroom fixed-top">
 <nav class="quarto-secondary-nav py-2 d-lg-none d-md-block " data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <div class="container-fluid d-flex justify-content-between">
-    <h1 class="quarto-secondary-nav-title mb-0 fs-3 d-inline">Bacteremia</h1>
+    <h1 class="quarto-secondary-nav-title mb-0 fs-3 d-inline"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Bacteremia</span></h1>
     <button type="button" class="quarto-btn-toggle btn d-lg-none py-0 px-1 d-inline-block border-0 ">
       <i class="bi bi-chevron-right"></i>
     </button>
@@ -87,36 +87,15 @@
       <li class="sidebar-item">
   <a href="./data_screen.html" class=""><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data screening and possible actions</span></a>
 </li>
-      <ul class="list-unstyled sidebar-section depth1">
-    <li class="">
-        <div class="me-auto">
-          <div class="d-inline-flex w-100 sidebar-section-item">
-            <div class="sidebar-section-link me-auto">
-            <a href="./Bact_intro.html" class="active">Bacteremia</a>
-            </div>
-            <a class="text-start  " data-bs-toggle="collapse" data-bs-target="#bacteremia-collapse" aria-expanded="true">
-              <div><i class="bi bi-chevron-right ms-2"></i></div>
-            </a>
-            </div>
-        </div>
-      <div class="collapse  show" id="bacteremia-collapse">
-        <ul class="list-unstyled sidebar-item-contents">
-          <li class="sidebar-item">
-  <a href="./Bact_SAP.html" class=""><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">IDA plan</span></a>
+      <li class="sidebar-item">
+  <a href="./Bact_intro.html" class="active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Bacteremia</span></a>
 </li>
-          <li class="sidebar-item">
-  <a href="./Bact_missing.html" class=""><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Missing data</span></a>
+      <li class="sidebar-item">
+  <a href="./Bact_SAP.html" class=""><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">IDA plan</span></a>
 </li>
-          <li class="sidebar-item">
-  <a href="./Bact_univar.html" class=""><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Univariate distribution checks</span></a>
+      <li class="sidebar-item">
+  <a href="./Bact_missing.html" class=""><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Missing data</span></a>
 </li>
-          <li class="sidebar-item">
-  <a href="./Bact_multivar.html" class=""><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Multivariate distributions</span></a>
-</li>
-        </ul>
-      </div>
-    </li>
-  </ul>
       <li class="sidebar-item">
   <a href="./references.html" class="">References</a>
 </li>
@@ -127,42 +106,42 @@
   <div id="quarto-toc-sidebar" class=" pt-0 col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#introduction-to-bacteremia" class="nav-link active" data-scroll-target="#introduction-to-bacteremia">Introduction to Bacteremia</a>
+<li><a href="#introduction-to-bacteremia" class="nav-link active" data-scroll-target="#introduction-to-bacteremia"> <span class="header-section-number">5</span> Introduction to Bacteremia</a>
 <ul class="collapse">
-<li><a href="#dataset-description" class="nav-link" data-scroll-target="#dataset-description">Dataset Description</a></li>
-<li><a href="#bacteremia-dataset-contents" class="nav-link" data-scroll-target="#bacteremia-dataset-contents">Bacteremia dataset contents</a>
+<li><a href="#dataset-description" class="nav-link" data-scroll-target="#dataset-description"> <span class="header-section-number">5.1</span> Dataset Description</a></li>
+<li><a href="#bacteremia-dataset-contents" class="nav-link" data-scroll-target="#bacteremia-dataset-contents"> <span class="header-section-number">5.2</span> Bacteremia dataset contents</a>
 <ul class="collapse">
-<li><a href="#source-dataset" class="nav-link" data-scroll-target="#source-dataset">Source dataset</a></li>
-<li><a href="#updated-analysis-dataset" class="nav-link" data-scroll-target="#updated-analysis-dataset">Updated analysis dataset</a></li>
+<li><a href="#source-dataset" class="nav-link" data-scroll-target="#source-dataset"> <span class="header-section-number">5.2.1</span> Source dataset</a></li>
+<li><a href="#updated-analysis-dataset" class="nav-link" data-scroll-target="#updated-analysis-dataset"> <span class="header-section-number">5.2.2</span> Updated analysis dataset</a></li>
 </ul></li>
-<li><a href="#section-session-info" class="nav-link" data-scroll-target="#section-session-info">Section session info</a></li>
+<li><a href="#section-session-info" class="nav-link" data-scroll-target="#section-session-info"> <span class="header-section-number">5.3</span> Section session info</a></li>
 </ul></li>
 </ul>
 </nav></div>
   <div class="col mx-auto col-sm-12 col-md-9 col-lg-7 col-xl-7 px-lg-4 pe-xxl-4 ps-xxl-3">
 <main>
 <header id="title-block-header">
-<h1 class="title display-7"><span id="Bacteremia" class="quarto-section-identifier d-none d-lg-block">Bacteremia</span></h1>
+<h1 class="title display-7"><span id="Bacteremia" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Bacteremia</span></span></h1>
 </header>
 
 <div class="cell">
 
 </div>
-<section id="introduction-to-bacteremia" class="level1">
-<h1>Introduction to Bacteremia</h1>
+<section id="introduction-to-bacteremia" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Introduction to Bacteremia</h1>
 <p>To demonstrate the workflow and content of IDA, we created a hypothetical research aim and corresponding statistical analysis plan, which is described in more detail in the section <a href="Bact_SAP.Rmd">Bact_SAP.Rmd</a>.</p>
 <p><strong>Hypothetical research aim for IDA</strong> is to develop a multivariable diagnostic model for bacteremia using 49 continuous laboratory blood parameters, age and gender with the primary aim of prediction and a secondary aim of describing the association of each variable with the outcome (‘explaining’ the multivariable model).</p>
 <p>A diagnostic prediction model was developed based on this data set and validated in “A Risk Prediction Model for Screening Bacteremic Patients: A Cross Sectional Study” <a href="https://doi.org/10.1371/journal.pone.0106765">Ratzinger et al, PLoS One 2014</a>. The assumed research aim is in line with this diagnostic prediction model.</p>
-<section id="dataset-description" class="level2">
-<h2 class="anchored" data-anchor-id="dataset-description">Dataset Description</h2>
+<section id="dataset-description" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="dataset-description"><span class="header-section-number">5.1</span> Dataset Description</h2>
 <p>Ratzinger et al (2014) performed a diagnostic study in which age, sex and 49 laboratory variables can be used to diagnose bacteremia status of a blood sample using a multivariable model. Between January 2006 and December 2010, patients with the clinical suspicion to suffer from bacteraemia were included if blood culture analysis was requested by the responsible physician and blood was sampled for assessment of haematology and biochemistry. The data consists of 14,691 observations from different patients.</p>
 <p>Our version of this data was slightly modified compared to original version, and this modified version was cleared by the Medical University of Vienna for public use (DC 2019-0054). Variable names have been kept as they were (partly German abbreviations). A data dictionary is available in the <strong>misc</strong> folder of the project directory (‘bacteremia-DataDictionary.csv’).</p>
 <p>In the original paper describing the study <a href="https://doi.org/10.1371/journal.pone.0106765">(Ratzinger et al, PLoS One 2014)</a>, a machine learning approach was taken to diagnose a positive status of blood culture. The true status was determined for all blood samples by blood culture analysis, which is the gold standard. Here we will make use of a multivariable logistic regression model.</p>
 </section>
-<section id="bacteremia-dataset-contents" class="level2">
-<h2 class="anchored" data-anchor-id="bacteremia-dataset-contents">Bacteremia dataset contents</h2>
-<section id="source-dataset" class="level3">
-<h3 class="anchored" data-anchor-id="source-dataset">Source dataset</h3>
+<section id="bacteremia-dataset-contents" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="bacteremia-dataset-contents"><span class="header-section-number">5.2</span> Bacteremia dataset contents</h2>
+<section id="source-dataset" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="source-dataset"><span class="header-section-number">5.2.1</span> Source dataset</h3>
 <p>We refer to the source data set as the dataset available in this repository.</p>
 <p>Display the source dataset contents. This dataset is in the <strong>data</strong> folder of the project directory.</p>
 <div class="cell-output-display">
@@ -246,8 +225,8 @@
 
 </div>
 </section>
-<section id="updated-analysis-dataset" class="level3">
-<h3 class="anchored" data-anchor-id="updated-analysis-dataset">Updated analysis dataset</h3>
+<section id="updated-analysis-dataset" class="level3" data-number="5.2.2">
+<h3 data-number="5.2.2" class="anchored" data-anchor-id="updated-analysis-dataset"><span class="header-section-number">5.2.2</span> Updated analysis dataset</h3>
 <p>Additional meta-data is added to the original <em>source</em> data set. We write this new modified (annotated) data set back to the <strong>data</strong> folder after adding additional meta-data for all variables. The meta-data is taken from the data dictionary.</p>
 <p>At the stage we could select the variables of interest to take in to the IDA phase by dropping variables we do not check in IDA.</p>
 <p>As a cross check we display the contents again to ensure the additional data is added, and then write the changes to the data folder in the file “data/a_bact.rda”.</p>
@@ -334,8 +313,8 @@
 <p>:::</p>
 </section>
 </section>
-<section id="section-session-info" class="level2">
-<h2 class="anchored" data-anchor-id="section-session-info">Section session info</h2>
+<section id="section-session-info" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="section-session-info"><span class="header-section-number">5.3</span> Section session info</h2>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.1.2 (2021-11-01)
@@ -469,7 +448,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
   <div class="nav-page nav-page-next">
       <a href="./Bact_SAP.html">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">IDA plan</span></span> <i class="bi bi-arrow-right-short"></i>
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">IDA plan</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </div>

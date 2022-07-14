@@ -3,7 +3,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="quarto-0.2.232">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Regression without regrets - 5&nbsp; Missing data</title>
+  <title>Regression without regrets - 6&nbsp; Missing data</title>
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -23,7 +23,7 @@
   <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
   <script src="site_libs/quarto-search/fuse.min.js"></script>
   <script src="site_libs/quarto-search/quarto-search.js"></script>
-  <link href="./Bact_univar.html" rel="next">
+  <link href="./references.html" rel="next">
   <link href="./Bact_SAP.html" rel="prev">
   <script src="site_libs/quarto-html/quarto.js"></script>
   <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -48,7 +48,7 @@
 <header id="quarto-header" class="headroom fixed-top">
 <nav class="quarto-secondary-nav py-2 d-lg-none d-md-block " data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <div class="container-fluid d-flex justify-content-between">
-    <h1 class="quarto-secondary-nav-title mb-0 fs-3 d-inline"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Missing data</span></h1>
+    <h1 class="quarto-secondary-nav-title mb-0 fs-3 d-inline"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Missing data</span></h1>
     <button type="button" class="quarto-btn-toggle btn d-lg-none py-0 px-1 d-inline-block border-0 ">
       <i class="bi bi-chevron-right"></i>
     </button>
@@ -87,36 +87,15 @@
       <li class="sidebar-item">
   <a href="./data_screen.html" class=""><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data screening and possible actions</span></a>
 </li>
-      <ul class="list-unstyled sidebar-section depth1">
-    <li class="">
-        <div class="me-auto">
-          <div class="d-inline-flex w-100 sidebar-section-item">
-            <div class="sidebar-section-link me-auto">
-            <a href="./Bact_intro.html" class="">Bacteremia</a>
-            </div>
-            <a class="text-start  " data-bs-toggle="collapse" data-bs-target="#bacteremia-collapse" aria-expanded="true">
-              <div><i class="bi bi-chevron-right ms-2"></i></div>
-            </a>
-            </div>
-        </div>
-      <div class="collapse  show" id="bacteremia-collapse">
-        <ul class="list-unstyled sidebar-item-contents">
-          <li class="sidebar-item">
-  <a href="./Bact_SAP.html" class=""><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">IDA plan</span></a>
+      <li class="sidebar-item">
+  <a href="./Bact_intro.html" class=""><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Bacteremia</span></a>
 </li>
-          <li class="sidebar-item">
-  <a href="./Bact_missing.html" class="active"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Missing data</span></a>
+      <li class="sidebar-item">
+  <a href="./Bact_SAP.html" class=""><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">IDA plan</span></a>
 </li>
-          <li class="sidebar-item">
-  <a href="./Bact_univar.html" class=""><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Univariate distribution checks</span></a>
+      <li class="sidebar-item">
+  <a href="./Bact_missing.html" class="active"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Missing data</span></a>
 </li>
-          <li class="sidebar-item">
-  <a href="./Bact_multivar.html" class=""><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Multivariate distributions</span></a>
-</li>
-        </ul>
-      </div>
-    </li>
-  </ul>
       <li class="sidebar-item">
   <a href="./references.html" class="">References</a>
 </li>
@@ -127,22 +106,22 @@
   <div id="quarto-toc-sidebar" class=" pt-0 col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#per-variable-missingness" class="nav-link active" data-scroll-target="#per-variable-missingness"> <span class="header-section-number">5.1</span> Per variable missingness</a></li>
-<li><a href="#missingness-patterns-over-variables" class="nav-link" data-scroll-target="#missingness-patterns-over-variables"> <span class="header-section-number">5.2</span> Missingness patterns over variables</a></li>
-<li><a href="#section-session-info" class="nav-link" data-scroll-target="#section-session-info"> <span class="header-section-number">5.3</span> Section session info</a></li>
+<li><a href="#per-variable-missingness" class="nav-link active" data-scroll-target="#per-variable-missingness"> <span class="header-section-number">6.1</span> Per variable missingness</a></li>
+<li><a href="#missingness-patterns-over-variables" class="nav-link" data-scroll-target="#missingness-patterns-over-variables"> <span class="header-section-number">6.2</span> Missingness patterns over variables</a></li>
+<li><a href="#section-session-info" class="nav-link" data-scroll-target="#section-session-info"> <span class="header-section-number">6.3</span> Section session info</a></li>
 </ul>
 </nav></div>
   <div class="col mx-auto col-sm-12 col-md-9 col-lg-7 col-xl-7 px-lg-4 pe-xxl-4 ps-xxl-3">
 <main>
 <header id="title-block-header">
-<h1 class="title d-none d-lg-block display-7"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Missing data</span></h1>
+<h1 class="title d-none d-lg-block display-7"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Missing data</span></h1>
 </header>
 
 <div class="cell">
 
 </div>
-<section id="per-variable-missingness" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="per-variable-missingness"><span class="header-section-number">5.1</span> Per variable missingness</h2>
+<section id="per-variable-missingness" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="per-variable-missingness"><span class="header-section-number">6.1</span> Per variable missingness</h2>
 <p>Number and percentage of missing.</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -1195,8 +1174,8 @@
 </div>
 <p>From this table we learn that as long as we model with only VIPs or with leukocyte-related variables, we can expect less than 10% missing values and this may justify a complete-case analysis. Including also kidney- and acute phase related variables will raise the proportion of missing values to about 36% which leads to a significant drop in power. A multiple imputation may then recover a lot of the information and may in particular be beneficial to keep the power of the (otherwise very complete) VIPs.</p>
 </section>
-<section id="missingness-patterns-over-variables" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="missingness-patterns-over-variables"><span class="header-section-number">5.2</span> Missingness patterns over variables</h2>
+<section id="missingness-patterns-over-variables" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="missingness-patterns-over-variables"><span class="header-section-number">6.2</span> Missingness patterns over variables</h2>
 <p>First we create a dendogram that shows which variables tend to be missing together:</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -1211,8 +1190,8 @@
 </div>
 <p>In this heatmap, we see that CHOL and TRIG are always missing together (lowest hierarchy in dendogram), but there are no further such pairs among any other variables. There is also some evidence that when CHOL and TRIG are missing, also PAMY is missing, although this is not the case for a small proportion of patients. The big white space in the middle of the heatmap represents the approx. 30% of patients with no missing values in those variables.</p>
 </section>
-<section id="section-session-info" class="level2" data-number="5.3">
-<h2 data-number="5.3" class="anchored" data-anchor-id="section-session-info"><span class="header-section-number">5.3</span> Section session info</h2>
+<section id="section-session-info" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="section-session-info"><span class="header-section-number">6.3</span> Section session info</h2>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.1.2 (2021-11-01)
@@ -1344,12 +1323,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <div class="page-navigation ">
   <div class="nav-page nav-page-previous">
       <a href="./Bact_SAP.html">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">IDA plan</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">IDA plan</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./Bact_univar.html">
-        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Univariate distribution checks</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./references.html">
+        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </div>
