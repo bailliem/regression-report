@@ -75,7 +75,7 @@ ggplot(c_bact, aes(HGB, HCT))+geom_point(alpha = alpha_value, shape = 20) + geom
 
 ggplot(c_bact, aes(MCV, MCH))+geom_point(alpha = alpha_value, shape = 20) + geom_smooth()
 
-ggplot(c_bact, aes(t_KREA, eGFR))+geom_point(alpha = alpha_value, shape = 20) + geom_smooth()
+#ggplot(c_bact, aes(t_KREA, eGFR))+geom_point(alpha = alpha_value, shape = 20) + geom_smooth()
 
 
 ggplot(c_bact, aes(t_ASAT, t_ALAT))+geom_point(alpha = alpha_value, shape = 20) + geom_smooth()
@@ -132,8 +132,7 @@ c_bact %>%
 c_bact$gender=factor(c_bact$SEX, levels=c(1,2), labels=c("male","female"))
 
 
-c_bact %>%
-ggplot(data=c_bact, mapping=aes(x=Alter, y=t_WBC, color=gender)) + geom_point(shape = 20) + geom_smooth()
+#c_bact %>% ggplot(data=c_bact, mapping=aes(x=Alter, y=t_WBC, color=gender)) + geom_point(shape = 20) + geom_smooth()
 ```
 
 ### Plot all variables vs. WBC in age/sex groups
