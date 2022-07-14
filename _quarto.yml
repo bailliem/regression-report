@@ -3,8 +3,8 @@ project:
   output-dir: _site
 
 execute:
-  echo: false
   freeze: true
+  echo: false
 
 book:
   title: "Regression without regrets"
@@ -18,9 +18,8 @@ book:
     - Bact_intro.qmd
     - Bact_SAP.qmd
     - Bact_missing.qmd
-    #- Bact_univar.qmd ## long running jobs - use ARd or freeze
-    #- Bact_multivar.qmd
-    #- Bact_suppl.qmd
+    - Bact_univar.qmd ## long running jobs - use ARd or freeze
+    - Bact_multivar.qmd
     - references.qmd
 
 bibliography: references.bib
