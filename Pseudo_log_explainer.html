@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang=""><head>
+  <meta charset="utf-8">
+  <meta name="generator" content="quarto-0.2.232">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="author" content="GH">
+  <meta name="dcterms.date" content="2022-08-08">
+  <title>Regression without regrets - 7&nbsp; Pseudo-log transformations</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <script src="site_libs/quarto-nav/quarto-nav.js"></script>
+  <script src="site_libs/quarto-nav/headroom.min.js"></script>
+  <script src="site_libs/clipboard/clipboard.min.js"></script>
+  <meta name="quarto:offset" content="./">
+  <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+  <script src="site_libs/quarto-search/fuse.min.js"></script>
+  <script src="site_libs/quarto-search/quarto-search.js"></script>
+  <link href="./Bact_univar.html" rel="next">
+  <link href="./Bact_missing.html" rel="prev">
+  <script src="site_libs/quarto-html/quarto.js"></script>
+  <script src="site_libs/quarto-html/popper.min.js"></script>
+  <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+  <script src="site_libs/quarto-html/anchor.min.js"></script>
+  <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+  <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+  <script src="site_libs/bootstrap/bootstrap.min.js"></script>
+  <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+  <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <script id="quarto-search-options" type="application/json">{
+    "location": "sidebar",
+    "copy-button": false,
+    "collapse-after": 2,
+    "panel-placement": "start",
+    "type": "textbox",
+    "limit": 20
+  }</script>
+</head>
+<body>
+<div id="quarto-search-results"></div>
+<header id="quarto-header" class="headroom fixed-top">
+<nav class="quarto-secondary-nav py-2 d-lg-none d-md-block " data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <div class="container-fluid d-flex justify-content-between">
+    <h1 class="quarto-secondary-nav-title mb-0 fs-3 d-inline"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Pseudo-log transformations</span></h1>
+    <button type="button" class="quarto-btn-toggle btn d-lg-none py-0 px-1 d-inline-block border-0 ">
+      <i class="bi bi-chevron-right"></i>
+    </button>
+  </div>
+</nav>
+</header>
+ <!-- /navbar/sidebar -->
+<div class="container-fluid quarto-container d-flex flex-column page-layout-article" id="quarto-content">
+<div class="row flex-fill">
+  <div id="quarto-sidebar" class="col col-12 col-lg-3 d-lg-flex px-0 pt-0 sidebar collapse sidebar-navigation">
+    <nav class="ms-lg-auto floating overflow-auto">
+  <div class="px-3 pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Regression without regrets</a> 
+        <div class="sidebar-tools-main">
+</div>
+    </div>
+  </div>
+    <div class="px-3 mt-2 flex-shrink-0 align-items-center">
+      <div class="sidebar-search">
+      <div id="quarto-search" class="mb-0 " title="Search">
+</div>
+      </div>
+    </div>
+  <div class="sidebar-menu-container"> 
+  <ul class="list-unstyled mt-1 px-3">
+      <li class="sidebar-item">
+  <a href="./index.html" class="">Preface</a>
+</li>
+      <li class="sidebar-item">
+  <a href="./IDA_framework.html" class=""><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">IDA Framework</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./scope.html" class=""><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Scope of the regression analyses for the examples</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./data_screen.html" class=""><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data screening and possible actions</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./Bact_intro.html" class=""><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Bacteremia</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./Bact_SAP.html" class=""><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">IDA plan</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./Bact_missing.html" class=""><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Missing data</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./Pseudo_log_explainer.html" class="active"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Pseudo-log transformations</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./Bact_univar.html" class=""><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Univariate distribution checks</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./Bact_multivar.html" class=""><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Multivariate distributions</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./references.html" class="">References</a>
+</li>
+  </ul>
+  </div>
+</nav>
+  </div>
+  <div id="quarto-toc-sidebar" class=" pt-0 col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
+<h2 id="toc-title">On this page</h2>
+<ul>
+<li><a href="#introduction" class="nav-link active" data-scroll-target="#introduction"> <span class="header-section-number">7.1</span> Introduction</a></li>
+<li><a href="#impact-of-choice-of-sigma" class="nav-link" data-scroll-target="#impact-of-choice-of-sigma"> <span class="header-section-number">7.2</span> Impact of choice of <span class="math inline">\(\sigma\)</span></a></li>
+<li><a href="#finding-a-parameter-that-best-achieves-normality" class="nav-link" data-scroll-target="#finding-a-parameter-that-best-achieves-normality"> <span class="header-section-number">7.3</span> Finding a parameter that best achieves normality</a>
+<ul class="collapse">
+<li><a href="#deviates-from-log-normal-distribution" class="nav-link" data-scroll-target="#deviates-from-log-normal-distribution"> <span class="header-section-number">7.3.1</span> Deviates from log normal distribution</a></li>
+<li><a href="#deviates-from-exponential-distribution" class="nav-link" data-scroll-target="#deviates-from-exponential-distribution"> <span class="header-section-number">7.3.2</span> Deviates from exponential distribution</a></li>
+<li><a href="#deviates-from-mixture-distribution" class="nav-link" data-scroll-target="#deviates-from-mixture-distribution"> <span class="header-section-number">7.3.3</span> Deviates from mixture distribution</a></li>
+<li><a href="#normal-deviates" class="nav-link" data-scroll-target="#normal-deviates"> <span class="header-section-number">7.3.4</span> Normal deviates</a></li>
+</ul></li>
+<li><a href="#references" class="nav-link" data-scroll-target="#references"> <span class="header-section-number">7.4</span> References</a></li>
+</ul>
+</nav></div>
+  <div class="col mx-auto col-sm-12 col-md-9 col-lg-7 col-xl-7 px-lg-4 pe-xxl-4 ps-xxl-3">
+<main>
+<header id="title-block-header">
+<h1 class="title d-none d-lg-block display-7"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Pseudo-log transformations</span></h1>
+<p class="author">GH</p>
+<p class="date">2022-08-08</p>
+</header>
+
+<section id="introduction" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">7.1</span> Introduction</h2>
+<p>This side document illustrates how pseudo-log transformations can be used to transform skewed distributions towards normality.</p>
+<p>The transformation <span class="math inline">\(f(x) = sinh^-1(x/2\sigma)/log(10)\)</span> is a pseudo-logarithmic transformation mentioned by Johnson (1949). It has the following advantages over ordinary logarithmic transformations:</p>
+<ul>
+<li>it is defined also for <span class="math inline">\(x=\)</span> as <span class="math inline">\(f(0) = 0\)</span></li>
+<li>it is a signed logarithmic transformation, and is defined also for negative values as <span class="math inline">\(f(-|x|)=-f(|x|)\)</span></li>
+</ul>
+<p>Of course, this comes at the cost of deviation from the logarithmic transformatio in terms of interpretability.</p>
+<p>The parameter <span class="math inline">\(\sigma\)</span> may be used to adapt the transformation to a specific range of an empirical distribution.</p>
+<p>We define the pseudo-logarithmic transformation in R as:</p>
+<div class="cell">
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pseudo_log <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">sigma=</span><span class="dv">1</span>, <span class="at">base=</span><span class="dv">10</span>)  <span class="fu">asinh</span>(x<span class="sc">/</span>(<span class="dv">2</span> <span class="sc">*</span> sigma))<span class="sc">/</span><span class="fu">log</span>(base)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>inv_pseudo_log <span class="ot">&lt;-</span> <span class="cf">function</span>(x, <span class="at">sigma=</span><span class="dv">1</span>, <span class="at">base=</span><span class="dv">10</span>) <span class="dv">2</span> <span class="sc">*</span> sigma <span class="sc">*</span> <span class="fu">sinh</span>(x <span class="sc">*</span> <span class="fu">log</span>(base))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+</section>
+<section id="impact-of-choice-of-sigma" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="impact-of-choice-of-sigma"><span class="header-section-number">7.2</span> Impact of choice of <span class="math inline">\(\sigma\)</span></h2>
+<p>Next, we investigate how the parameter <span class="math inline">\(\sigma\)</span> impacts the result of the transformation. We assume that <span class="math inline">\(x\)</span> follows a log-normal distribution, and we will show results of <span class="math inline">\(f(x)\)</span> with different choices of <span class="math inline">\(\sigma\)</span>. We center and scale <span class="math inline">\(f(x)\)</span> before plotting.</p>
+<div class="cell">
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.001</span>, <span class="fl">0.999</span>, <span class="fl">0.001</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">qnorm</span>(p, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>))</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Pseudo_log_explainer_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">log</span>(x), <span class="fu">scale</span>(<span class="fu">pseudo_log</span>(x, <span class="dv">1</span>)), <span class="fu">scale</span>(<span class="fu">pseudo_log</span>(x,<span class="fl">0.5</span>)), <span class="fu">scale</span>(<span class="fu">pseudo_log</span>(x, <span class="dv">2</span>)), <span class="fu">scale</span>(<span class="fu">pseudo_log</span>(x, <span class="fl">0.05</span>)))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y[,<span class="dv">2</span>], <span class="at">type=</span><span class="st">"l"</span>, <span class="at">ylab=</span><span class="st">"f(x)"</span>, <span class="at">ylim=</span><span class="fu">range</span>(y))</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, y[,<span class="dv">1</span>], <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, y[,<span class="dv">3</span>], <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, y[,<span class="dv">4</span>], <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lty=</span><span class="dv">3</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, y[,<span class="dv">5</span>], <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lty=</span><span class="dv">4</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"topleft"</span>, <span class="at">lty=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>), <span class="at">col=</span><span class="fu">c</span>(<span class="st">"red"</span>,<span class="st">"black"</span>,<span class="st">"black"</span>,<span class="st">"black"</span>,<span class="st">"black"</span>), <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"log"</span>, <span class="st">"sigma=1"</span>, <span class="st">"sigma=0.5"</span>, <span class="st">"sigma=2"</span>, <span class="st">"sigma=0.05"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Pseudo_log_explainer_files/figure-html/unnamed-chunk-4-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>In the next code chunk, we multiply by 10 and repeat the exercise. We learn that the transformations become more similar and the choice of <span class="math inline">\(\sigma\)</span> less relevant.</p>
+<div class="cell">
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> x<span class="sc">*</span><span class="dv">10</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="fu">scale</span>(<span class="fu">log</span>(x)), <span class="fu">scale</span>(<span class="fu">pseudo_log</span>(x, <span class="dv">1</span>)), <span class="fu">scale</span>(<span class="fu">pseudo_log</span>(x,<span class="fl">0.5</span>)), <span class="fu">scale</span>(<span class="fu">pseudo_log</span>(x, <span class="dv">2</span>)), <span class="fu">scale</span>(<span class="fu">pseudo_log</span>(x, <span class="fl">0.05</span>)))</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y[,<span class="dv">2</span>], <span class="at">type=</span><span class="st">"l"</span>, <span class="at">ylab=</span><span class="st">"f(x)"</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, y[,<span class="dv">1</span>], <span class="at">col=</span><span class="st">"red"</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, y[,<span class="dv">3</span>], <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, y[,<span class="dv">4</span>], <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lty=</span><span class="dv">3</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, y[,<span class="dv">5</span>], <span class="at">type=</span><span class="st">"l"</span>, <span class="at">lty=</span><span class="dv">4</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">lty=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>), <span class="at">col=</span><span class="fu">c</span>(<span class="st">"red"</span>,<span class="st">"black"</span>,<span class="st">"black"</span>,<span class="st">"black"</span>,<span class="st">"black"</span>), <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"log"</span>, <span class="st">"sigma=1"</span>, <span class="st">"sigma=0.5"</span>, <span class="st">"sigma=2"</span>, <span class="st">"sigma=0.05"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Pseudo_log_explainer_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Finally, we apply the pseudo-logarithmic transformation to the original normal deviates. We learn that a higher value for the parameter <span class="math inline">\(\sigma\)</span> makes the distribution ‘slimmer’ while a lower value makes it ‘fatter’, and it is even possible to induce bimodality with low values of sigma:</p>
+<div class="cell">
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>z <span class="ot">&lt;-</span> <span class="fu">qnorm</span>(p, <span class="at">mean=</span><span class="dv">0</span>, <span class="at">sd=</span><span class="dv">1</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(z)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Pseudo_log_explainer_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">pseudo_log</span>(z, <span class="at">sigma=</span><span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Pseudo_log_explainer_files/figure-html/unnamed-chunk-8-2.png" class="img-fluid" width="672"></p>
+</div>
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">pseudo_log</span>(z, <span class="at">sigma=</span><span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Pseudo_log_explainer_files/figure-html/unnamed-chunk-8-3.png" class="img-fluid" width="672"></p>
+</div>
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">pseudo_log</span>(z, <span class="at">sigma=</span><span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Pseudo_log_explainer_files/figure-html/unnamed-chunk-8-4.png" class="img-fluid" width="672"></p>
+</div>
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">pseudo_log</span>(z, <span class="at">sigma=</span><span class="fl">0.05</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Pseudo_log_explainer_files/figure-html/unnamed-chunk-8-5.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="finding-a-parameter-that-best-achieves-normality" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="finding-a-parameter-that-best-achieves-normality"><span class="header-section-number">7.3</span> Finding a parameter that best achieves normality</h2>
+<p>Any test statistic for testing normality could be chosen to find a suitable value of <span class="math inline">\(\sigma\)</span> that induces normality into the transformed values. Here we use the (Pearson) correlation coefficient to compare the empirical distribution with normal deviates.</p>
+<section id="deviates-from-log-normal-distribution" class="level3" data-number="7.3.1">
+<h3 data-number="7.3.1" class="anchored" data-anchor-id="deviates-from-log-normal-distribution"><span class="header-section-number">7.3.1</span> Deviates from log normal distribution</h3>
+<p>We simulate from a shifted log normal distribution and evaluate the value of <span class="math inline">\(\sigma\)</span> that optimizes agreement with a normal distribution:</p>
+<div class="cell">
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">sort</span>(<span class="fu">exp</span>(<span class="fu">rnorm</span>(<span class="dv">1000</span>)<span class="sc">+</span><span class="dv">3</span>))</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Pseudo_log_explainer_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>sigmas <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">**</span><span class="fu">seq</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">1</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>origcor <span class="ot">&lt;-</span> <span class="fu">cor</span>(<span class="fu">qnorm</span>((<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(x)<span class="sc">-</span><span class="fl">0.5</span>)<span class="sc">/</span><span class="fu">length</span>(x)), x)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>ncorx <span class="ot">&lt;-</span> <span class="fu">sapply</span>(sigmas, <span class="cf">function</span>(X) <span class="fu">cor</span>(<span class="fu">qnorm</span>((<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(x)<span class="sc">-</span><span class="fl">0.5</span>)<span class="sc">/</span><span class="fu">length</span>(x)), <span class="fu">pseudo_log</span>(x,X)))</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Optimal sigma: "</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Optimal sigma: </code></pre>
+</div>
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>(optsigma<span class="ot">&lt;-</span>sigmas[ncorx<span class="sc">==</span><span class="fu">max</span>(ncorx)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0009765625</code></pre>
+</div>
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">log2</span>(sigmas), ncorx, <span class="at">ylab=</span><span class="st">"Correlation with normal deviates"</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(<span class="fu">log2</span>(sigmas)[ncorx<span class="sc">==</span><span class="fu">max</span>(ncorx)], <span class="fu">max</span>(ncorx), <span class="at">pch=</span><span class="dv">19</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span>origcor)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">lty=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="cn">NA</span>,<span class="cn">NA</span>), <span class="at">pch=</span><span class="fu">c</span>(<span class="cn">NA</span>,<span class="dv">1</span>,<span class="dv">19</span>), <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"Original"</span>, <span class="st">"Pseudo-log"</span>, <span class="st">"Pseudo-log with optimal sigma"</span>))</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="fu">box</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Pseudo_log_explainer_files/figure-html/unnamed-chunk-10-2.png" class="img-fluid" width="672"></p>
+</div>
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">pseudo_log</span>(x, optsigma))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Pseudo_log_explainer_files/figure-html/unnamed-chunk-10-3.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="deviates-from-exponential-distribution" class="level3" data-number="7.3.2">
+<h3 data-number="7.3.2" class="anchored" data-anchor-id="deviates-from-exponential-distribution"><span class="header-section-number">7.3.2</span> Deviates from exponential distribution</h3>
+<p>Also with an exponential distribution, the pseudo-logarithm may achieve a better agreement with a normal:</p>
+<div class="cell">
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">sort</span>(<span class="fu">exp</span>(<span class="fu">rnorm</span>(<span class="dv">1000</span>)<span class="sc">+</span><span class="dv">3</span>))</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Pseudo_log_explainer_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+</div>
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>sigmas <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">**</span><span class="fu">seq</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">1</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>origcor <span class="ot">&lt;-</span> <span class="fu">cor</span>(<span class="fu">qnorm</span>((<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(x)<span class="sc">-</span><span class="fl">0.5</span>)<span class="sc">/</span><span class="fu">length</span>(x)), x)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>ncorx <span class="ot">&lt;-</span> <span class="fu">sapply</span>(sigmas, <span class="cf">function</span>(X) <span class="fu">cor</span>(<span class="fu">qnorm</span>((<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(x)<span class="sc">-</span><span class="fl">0.5</span>)<span class="sc">/</span><span class="fu">length</span>(x)), <span class="fu">pseudo_log</span>(x,X)))</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Optimal sigma: "</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Optimal sigma: </code></pre>
+</div>
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>(optsigma<span class="ot">&lt;-</span>sigmas[ncorx<span class="sc">==</span><span class="fu">max</span>(ncorx)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.0009765625</code></pre>
+</div>
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">log2</span>(sigmas), ncorx, <span class="at">ylab=</span><span class="st">"Correlation with normal deviates"</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(<span class="fu">log2</span>(sigmas)[ncorx<span class="sc">==</span><span class="fu">max</span>(ncorx)], <span class="fu">max</span>(ncorx), <span class="at">pch=</span><span class="dv">19</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span>origcor)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">lty=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="cn">NA</span>,<span class="cn">NA</span>), <span class="at">pch=</span><span class="fu">c</span>(<span class="cn">NA</span>,<span class="dv">1</span>,<span class="dv">19</span>), <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"Original"</span>, <span class="st">"Pseudo-log"</span>, <span class="st">"Pseudo-log with optimal sigma"</span>))</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="fu">box</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Pseudo_log_explainer_files/figure-html/unnamed-chunk-12-2.png" class="img-fluid" width="672"></p>
+</div>
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">pseudo_log</span>(x, optsigma))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Pseudo_log_explainer_files/figure-html/unnamed-chunk-12-3.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="deviates-from-mixture-distribution" class="level3" data-number="7.3.3">
+<h3 data-number="7.3.3" class="anchored" data-anchor-id="deviates-from-mixture-distribution"><span class="header-section-number">7.3.3</span> Deviates from mixture distribution</h3>
+<p>Now we mix a normal, lognormal and exponential distribution:</p>
+<div class="cell">
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">&lt;-</span> <span class="fu">scale</span>(<span class="fu">rnorm</span>(<span class="dv">1000</span>))</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> <span class="fu">scale</span>(<span class="fu">rexp</span>(<span class="dv">1000</span>))</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>x3 <span class="ot">&lt;-</span> <span class="fu">scale</span>(<span class="fu">exp</span>(<span class="fu">rnorm</span>(<span class="dv">1000</span>)))</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="dv">1000</span>, <span class="dv">1</span>, <span class="fl">0.33</span>)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="dv">1000</span>, <span class="dv">1</span>, <span class="fl">0.5</span>)</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>x<span class="ot">&lt;-</span>p1<span class="sc">*</span>x1 <span class="sc">+</span> (<span class="dv">1</span><span class="sc">-</span>p1)<span class="sc">*</span>(p2<span class="sc">*</span>x2<span class="sc">+</span>(<span class="dv">1</span><span class="sc">-</span>p2)<span class="sc">*</span>x3)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> x<span class="sc">-</span><span class="fu">min</span>(x)</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">sort</span>(x)</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Pseudo_log_explainer_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="672"></p>
+</div>
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>sigmas <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">**</span><span class="fu">seq</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">1</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>origcor <span class="ot">&lt;-</span> <span class="fu">cor</span>(<span class="fu">qnorm</span>((<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(x)<span class="sc">-</span><span class="fl">0.5</span>)<span class="sc">/</span><span class="fu">length</span>(x)), x)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>ncorx <span class="ot">&lt;-</span> <span class="fu">sapply</span>(sigmas, <span class="cf">function</span>(X) <span class="fu">cor</span>(<span class="fu">qnorm</span>((<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(x)<span class="sc">-</span><span class="fl">0.5</span>)<span class="sc">/</span><span class="fu">length</span>(x)), <span class="fu">pseudo_log</span>(x,X)))</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Optimal sigma: "</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Optimal sigma: </code></pre>
+</div>
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>(optsigma<span class="ot">&lt;-</span>sigmas[ncorx<span class="sc">==</span><span class="fu">max</span>(ncorx)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.5</code></pre>
+</div>
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">log2</span>(sigmas), ncorx, <span class="at">ylab=</span><span class="st">"Correlation with normal deviates"</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(<span class="fu">log2</span>(sigmas)[ncorx<span class="sc">==</span><span class="fu">max</span>(ncorx)], <span class="fu">max</span>(ncorx), <span class="at">pch=</span><span class="dv">19</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span>origcor)</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">lty=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="cn">NA</span>,<span class="cn">NA</span>), <span class="at">pch=</span><span class="fu">c</span>(<span class="cn">NA</span>,<span class="dv">1</span>,<span class="dv">19</span>), <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"Original"</span>, <span class="st">"Pseudo-log"</span>, <span class="st">"Pseudo-log with optimal sigma"</span>))</span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="fu">box</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Pseudo_log_explainer_files/figure-html/unnamed-chunk-14-2.png" class="img-fluid" width="672"></p>
+</div>
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">pseudo_log</span>(x, optsigma))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Pseudo_log_explainer_files/figure-html/unnamed-chunk-14-3.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="normal-deviates" class="level3" data-number="7.3.4">
+<h3 data-number="7.3.4" class="anchored" data-anchor-id="normal-deviates"><span class="header-section-number">7.3.4</span> Normal deviates</h3>
+<p>With simulated normal deviates, the pseudo-logarithm cannot improve the already perfect normality.</p>
+<div class="cell">
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>x<span class="ot">&lt;-</span><span class="fu">sort</span>(<span class="fu">rnorm</span>(<span class="dv">1000</span>))</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Pseudo_log_explainer_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid" width="672"></p>
+</div>
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>sigmas <span class="ot">&lt;-</span> <span class="dv">2</span><span class="sc">**</span><span class="fu">seq</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="dv">1</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>origcor <span class="ot">&lt;-</span> <span class="fu">cor</span>(<span class="fu">qnorm</span>((<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(x)<span class="sc">-</span><span class="fl">0.5</span>)<span class="sc">/</span><span class="fu">length</span>(x)), x)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>ncorx <span class="ot">&lt;-</span> <span class="fu">sapply</span>(sigmas, <span class="cf">function</span>(X) <span class="fu">cor</span>(<span class="fu">qnorm</span>((<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(x)<span class="sc">-</span><span class="fl">0.5</span>)<span class="sc">/</span><span class="fu">length</span>(x)), <span class="fu">pseudo_log</span>(x,X)))</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Optimal sigma: "</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Optimal sigma: </code></pre>
+</div>
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>(optsigma<span class="ot">&lt;-</span>sigmas[ncorx<span class="sc">==</span><span class="fu">max</span>(ncorx)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2</code></pre>
+</div>
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">log2</span>(sigmas), ncorx, <span class="at">ylab=</span><span class="st">"Correlation with normal deviates"</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>))</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(<span class="fu">log2</span>(sigmas)[ncorx<span class="sc">==</span><span class="fu">max</span>(ncorx)], <span class="fu">max</span>(ncorx), <span class="at">pch=</span><span class="dv">19</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"bottomright"</span>, <span class="at">lty=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="cn">NA</span>,<span class="cn">NA</span>), <span class="at">pch=</span><span class="fu">c</span>(<span class="cn">NA</span>,<span class="dv">1</span>,<span class="dv">19</span>), <span class="at">legend=</span><span class="fu">c</span>(<span class="st">"Original"</span>, <span class="st">"Pseudo-log"</span>, <span class="st">"Pseudo-log with optimal sigma"</span>))</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">h=</span>origcor)</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="fu">box</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Pseudo_log_explainer_files/figure-html/unnamed-chunk-16-2.png" class="img-fluid" width="672"></p>
+</div>
+<p></p><details>
+<summary>Show the code</summary><p></p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r cell-code code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">pseudo_log</span>(x, optsigma))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="Pseudo_log_explainer_files/figure-html/unnamed-chunk-16-3.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="references" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="references"><span class="header-section-number">7.4</span> References</h2>
+<p>Johnson NL (1949). Systems of Frequency curves Generated by Methods of Translation. Biometrika 36, 149-176.</p>
+
+
+</section>
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    setTimeout(function() {
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    window.tippy(el, {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    }); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</main>
+<div class="page-navigation ">
+  <div class="nav-page nav-page-previous">
+      <a href="./Bact_missing.html">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Missing data</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./Bact_univar.html">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Univariate distribution checks</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</div>
+</div> <!-- /main column -->
+</div> <!-- /row -->
+</div> <!-- /container fluid -->
+
+
+</body></html>

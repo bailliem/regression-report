@@ -3,7 +3,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="quarto-0.2.232">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Regression without regrets - 8&nbsp; Multivariate distributions</title>
+  <title>Regression without regrets - 9&nbsp; Multivariate distributions</title>
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -120,7 +120,7 @@
 <header id="quarto-header" class="headroom fixed-top">
 <nav class="quarto-secondary-nav py-2 d-lg-none d-md-block " data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <div class="container-fluid d-flex justify-content-between">
-    <h1 class="quarto-secondary-nav-title mb-0 fs-3 d-inline"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multivariate distributions</span></h1>
+    <h1 class="quarto-secondary-nav-title mb-0 fs-3 d-inline"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Multivariate distributions</span></h1>
     <button type="button" class="quarto-btn-toggle btn d-lg-none py-0 px-1 d-inline-block border-0 ">
       <i class="bi bi-chevron-right"></i>
     </button>
@@ -169,10 +169,13 @@
   <a href="./Bact_missing.html" class=""><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Missing data</span></a>
 </li>
       <li class="sidebar-item">
-  <a href="./Bact_univar.html" class=""><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Univariate distribution checks</span></a>
+  <a href="./Pseudo_log_explainer.html" class=""><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Pseudo-log transformations</span></a>
 </li>
       <li class="sidebar-item">
-  <a href="./Bact_multivar.html" class="active"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multivariate distributions</span></a>
+  <a href="./Bact_univar.html" class=""><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Univariate distribution checks</span></a>
+</li>
+      <li class="sidebar-item">
+  <a href="./Bact_multivar.html" class="active"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Multivariate distributions</span></a>
 </li>
       <li class="sidebar-item">
   <a href="./references.html" class="">References</a>
@@ -184,37 +187,37 @@
   <div id="quarto-toc-sidebar" class=" pt-0 col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
 <h2 id="toc-title">On this page</h2>
 <ul>
-<li><a href="#overview" class="nav-link active" data-scroll-target="#overview"> <span class="header-section-number">8.1</span> Overview</a>
+<li><a href="#overview" class="nav-link active" data-scroll-target="#overview"> <span class="header-section-number">9.1</span> Overview</a>
 <ul class="collapse">
-<li><a href="#variable-correlation" class="nav-link" data-scroll-target="#variable-correlation"> <span class="header-section-number">8.1.1</span> Variable correlation</a></li>
-<li><a href="#distribution-of-age-by-sex" class="nav-link" data-scroll-target="#distribution-of-age-by-sex"> <span class="header-section-number">8.1.2</span> Distribution of age by sex</a></li>
-<li><a href="#distribution-of-leukocytes-by-age-coloured-by-sex" class="nav-link" data-scroll-target="#distribution-of-leukocytes-by-age-coloured-by-sex"> <span class="header-section-number">8.1.3</span> Distribution of leukocytes by age, coloured by sex</a></li>
-<li><a href="#plot-all-variables-vs.-wbc-in-agesex-groups" class="nav-link" data-scroll-target="#plot-all-variables-vs.-wbc-in-agesex-groups"> <span class="header-section-number">8.1.4</span> Plot all variables vs.&nbsp;WBC in age/sex groups</a></li>
-<li><a href="#plot-all-variables-vs.-wbc-in-agesex-groups-loess-curves-only" class="nav-link" data-scroll-target="#plot-all-variables-vs.-wbc-in-agesex-groups-loess-curves-only"> <span class="header-section-number">8.1.5</span> Plot all variables vs.&nbsp;WBC in age/sex groups: loess curves only</a></li>
-<li><a href="#plot-all-variables-vs.-wbc-in-agesex-groups-loess-curves-only-1" class="nav-link" data-scroll-target="#plot-all-variables-vs.-wbc-in-agesex-groups-loess-curves-only-1"> <span class="header-section-number">8.1.6</span> Plot all variables vs.&nbsp;WBC in age/sex groups: loess curves only</a></li>
+<li><a href="#variable-correlation" class="nav-link" data-scroll-target="#variable-correlation"> <span class="header-section-number">9.1.1</span> Variable correlation</a></li>
+<li><a href="#distribution-of-age-by-sex" class="nav-link" data-scroll-target="#distribution-of-age-by-sex"> <span class="header-section-number">9.1.2</span> Distribution of age by sex</a></li>
+<li><a href="#distribution-of-leukocytes-by-age-coloured-by-sex" class="nav-link" data-scroll-target="#distribution-of-leukocytes-by-age-coloured-by-sex"> <span class="header-section-number">9.1.3</span> Distribution of leukocytes by age, coloured by sex</a></li>
+<li><a href="#plot-all-variables-vs.-wbc-in-agesex-groups" class="nav-link" data-scroll-target="#plot-all-variables-vs.-wbc-in-agesex-groups"> <span class="header-section-number">9.1.4</span> Plot all variables vs.&nbsp;WBC in age/sex groups</a></li>
+<li><a href="#plot-all-variables-vs.-wbc-in-agesex-groups-loess-curves-only" class="nav-link" data-scroll-target="#plot-all-variables-vs.-wbc-in-agesex-groups-loess-curves-only"> <span class="header-section-number">9.1.5</span> Plot all variables vs.&nbsp;WBC in age/sex groups: loess curves only</a></li>
+<li><a href="#plot-all-variables-vs.-wbc-in-agesex-groups-loess-curves-only-1" class="nav-link" data-scroll-target="#plot-all-variables-vs.-wbc-in-agesex-groups-loess-curves-only-1"> <span class="header-section-number">9.1.6</span> Plot all variables vs.&nbsp;WBC in age/sex groups: loess curves only</a></li>
 </ul></li>
-<li><a href="#variable-redundancy" class="nav-link" data-scroll-target="#variable-redundancy"> <span class="header-section-number">8.2</span> Variable redundancy</a>
+<li><a href="#variable-redundancy" class="nav-link" data-scroll-target="#variable-redundancy"> <span class="header-section-number">9.2</span> Variable redundancy</a>
 <ul class="collapse">
-<li><a href="#redundancy-among-key-predictors" class="nav-link" data-scroll-target="#redundancy-among-key-predictors"> <span class="header-section-number">8.2.1</span> Redundancy among key predictors</a></li>
-<li><a href="#redundancy-among-leukocyte-related-variables" class="nav-link" data-scroll-target="#redundancy-among-leukocyte-related-variables"> <span class="header-section-number">8.2.2</span> Redundancy among leukocyte-related variables</a></li>
-<li><a href="#redundancy-among-all-potential-predictors" class="nav-link" data-scroll-target="#redundancy-among-all-potential-predictors"> <span class="header-section-number">8.2.3</span> Redundancy among all potential predictors</a></li>
+<li><a href="#redundancy-among-key-predictors" class="nav-link" data-scroll-target="#redundancy-among-key-predictors"> <span class="header-section-number">9.2.1</span> Redundancy among key predictors</a></li>
+<li><a href="#redundancy-among-leukocyte-related-variables" class="nav-link" data-scroll-target="#redundancy-among-leukocyte-related-variables"> <span class="header-section-number">9.2.2</span> Redundancy among leukocyte-related variables</a></li>
+<li><a href="#redundancy-among-all-potential-predictors" class="nav-link" data-scroll-target="#redundancy-among-all-potential-predictors"> <span class="header-section-number">9.2.3</span> Redundancy among all potential predictors</a></li>
 </ul></li>
-<li><a href="#section-session-info" class="nav-link" data-scroll-target="#section-session-info"> <span class="header-section-number">8.3</span> Section session info</a></li>
+<li><a href="#section-session-info" class="nav-link" data-scroll-target="#section-session-info"> <span class="header-section-number">9.3</span> Section session info</a></li>
 </ul>
 </nav></div>
   <div class="col mx-auto col-sm-12 col-md-9 col-lg-7 col-xl-7 px-lg-4 pe-xxl-4 ps-xxl-3">
 <main>
 <header id="title-block-header">
-<h1 class="title d-none d-lg-block display-7"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Multivariate distributions</span></h1>
+<h1 class="title d-none d-lg-block display-7"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Multivariate distributions</span></h1>
 </header>
 
 <div class="cell">
 
 </div>
-<section id="overview" class="level2" data-number="8.1">
-<h2 data-number="8.1" class="anchored" data-anchor-id="overview"><span class="header-section-number">8.1</span> Overview</h2>
-<section id="variable-correlation" class="level3" data-number="8.1.1">
-<h3 data-number="8.1.1" class="anchored" data-anchor-id="variable-correlation"><span class="header-section-number">8.1.1</span> Variable correlation</h3>
+<section id="overview" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="overview"><span class="header-section-number">9.1</span> Overview</h2>
+<section id="variable-correlation" class="level3" data-number="9.1.1">
+<h3 data-number="9.1.1" class="anchored" data-anchor-id="variable-correlation"><span class="header-section-number">9.1.1</span> Variable correlation</h3>
 <p>Compute correlations between the independent variables or their suggested transformations.</p>
 <div class="cell">
 <p></p><details>
@@ -516,8 +519,8 @@ Removed 732 rows containing missing values (geom_point).</code></pre>
 </div>
 </div>
 </section>
-<section id="distribution-of-age-by-sex" class="level3" data-number="8.1.2">
-<h3 data-number="8.1.2" class="anchored" data-anchor-id="distribution-of-age-by-sex"><span class="header-section-number">8.1.2</span> Distribution of age by sex</h3>
+<section id="distribution-of-age-by-sex" class="level3" data-number="9.1.2">
+<h3 data-number="9.1.2" class="anchored" data-anchor-id="distribution-of-age-by-sex"><span class="header-section-number">9.1.2</span> Distribution of age by sex</h3>
 <div class="cell">
 <div class="cell-output-display">
 <div id="htmlwidget-dead485316814cde8ae6" style="width:100%;height:241px;" class="plotly html-widget"></div>
@@ -526,8 +529,8 @@ Removed 732 rows containing missing values (geom_point).</code></pre>
 </div>
 </div>
 </section>
-<section id="distribution-of-leukocytes-by-age-coloured-by-sex" class="level3" data-number="8.1.3">
-<h3 data-number="8.1.3" class="anchored" data-anchor-id="distribution-of-leukocytes-by-age-coloured-by-sex"><span class="header-section-number">8.1.3</span> Distribution of leukocytes by age, coloured by sex</h3>
+<section id="distribution-of-leukocytes-by-age-coloured-by-sex" class="level3" data-number="9.1.3">
+<h3 data-number="9.1.3" class="anchored" data-anchor-id="distribution-of-leukocytes-by-age-coloured-by-sex"><span class="header-section-number">9.1.3</span> Distribution of leukocytes by age, coloured by sex</h3>
 <div class="cell">
 <p></p><details>
 <summary>Show the code</summary><p></p>
@@ -538,8 +541,8 @@ Removed 732 rows containing missing values (geom_point).</code></pre>
 </details>
 </div>
 </section>
-<section id="plot-all-variables-vs.-wbc-in-agesex-groups" class="level3" data-number="8.1.4">
-<h3 data-number="8.1.4" class="anchored" data-anchor-id="plot-all-variables-vs.-wbc-in-agesex-groups"><span class="header-section-number">8.1.4</span> Plot all variables vs.&nbsp;WBC in age/sex groups</h3>
+<section id="plot-all-variables-vs.-wbc-in-agesex-groups" class="level3" data-number="9.1.4">
+<h3 data-number="9.1.4" class="anchored" data-anchor-id="plot-all-variables-vs.-wbc-in-agesex-groups"><span class="header-section-number">9.1.4</span> Plot all variables vs.&nbsp;WBC in age/sex groups</h3>
 <div class="cell">
 <p></p><details>
 <summary>Show the code</summary><p></p>
@@ -1168,8 +1171,8 @@ Removed 463 rows containing missing values (geom_point).</code></pre>
 </details>
 </div>
 </section>
-<section id="plot-all-variables-vs.-wbc-in-agesex-groups-loess-curves-only" class="level3" data-number="8.1.5">
-<h3 data-number="8.1.5" class="anchored" data-anchor-id="plot-all-variables-vs.-wbc-in-agesex-groups-loess-curves-only"><span class="header-section-number">8.1.5</span> Plot all variables vs.&nbsp;WBC in age/sex groups: loess curves only</h3>
+<section id="plot-all-variables-vs.-wbc-in-agesex-groups-loess-curves-only" class="level3" data-number="9.1.5">
+<h3 data-number="9.1.5" class="anchored" data-anchor-id="plot-all-variables-vs.-wbc-in-agesex-groups-loess-curves-only"><span class="header-section-number">9.1.5</span> Plot all variables vs.&nbsp;WBC in age/sex groups: loess curves only</h3>
 <div class="cell">
 <p></p><details>
 <summary>Show the code</summary><p></p>
@@ -1642,8 +1645,8 @@ Removed 463 rows containing missing values (geom_point).</code></pre>
 </div>
 </div>
 </section>
-<section id="plot-all-variables-vs.-wbc-in-agesex-groups-loess-curves-only-1" class="level3" data-number="8.1.6">
-<h3 data-number="8.1.6" class="anchored" data-anchor-id="plot-all-variables-vs.-wbc-in-agesex-groups-loess-curves-only-1"><span class="header-section-number">8.1.6</span> Plot all variables vs.&nbsp;WBC in age/sex groups: loess curves only</h3>
+<section id="plot-all-variables-vs.-wbc-in-agesex-groups-loess-curves-only-1" class="level3" data-number="9.1.6">
+<h3 data-number="9.1.6" class="anchored" data-anchor-id="plot-all-variables-vs.-wbc-in-agesex-groups-loess-curves-only-1"><span class="header-section-number">9.1.6</span> Plot all variables vs.&nbsp;WBC in age/sex groups: loess curves only</h3>
 <div class="cell">
 <p></p><details>
 <summary>Show the code</summary><p></p>
@@ -2118,10 +2121,10 @@ Removed 463 rows containing missing values (geom_point).</code></pre>
 </div>
 </section>
 </section>
-<section id="variable-redundancy" class="level2" data-number="8.2">
-<h2 data-number="8.2" class="anchored" data-anchor-id="variable-redundancy"><span class="header-section-number">8.2</span> Variable redundancy</h2>
-<section id="redundancy-among-key-predictors" class="level3" data-number="8.2.1">
-<h3 data-number="8.2.1" class="anchored" data-anchor-id="redundancy-among-key-predictors"><span class="header-section-number">8.2.1</span> Redundancy among key predictors</h3>
+<section id="variable-redundancy" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="variable-redundancy"><span class="header-section-number">9.2</span> Variable redundancy</h2>
+<section id="redundancy-among-key-predictors" class="level3" data-number="9.2.1">
+<h3 data-number="9.2.1" class="anchored" data-anchor-id="redundancy-among-key-predictors"><span class="header-section-number">9.2.1</span> Redundancy among key predictors</h3>
 <p>First we start with a redundancy analysis with the predictors deemed important by preceding studies.</p>
 <div class="cell">
 <p></p><details>
@@ -2172,8 +2175,8 @@ AGE SEX t_BUN t_CREA t_NEU PLT
 </div>
 <p>This analysis suggests redundancy of WBC after NEU is in the predictor set. We investigate this further by looking only at leukocyte-related variables.</p>
 </section>
-<section id="redundancy-among-leukocyte-related-variables" class="level3" data-number="8.2.2">
-<h3 data-number="8.2.2" class="anchored" data-anchor-id="redundancy-among-leukocyte-related-variables"><span class="header-section-number">8.2.2</span> Redundancy among leukocyte-related variables</h3>
+<section id="redundancy-among-leukocyte-related-variables" class="level3" data-number="9.2.2">
+<h3 data-number="9.2.2" class="anchored" data-anchor-id="redundancy-among-leukocyte-related-variables"><span class="header-section-number">9.2.2</span> Redundancy among leukocyte-related variables</h3>
 <p>In redundancy analysis of all predictor variables, the large number of non-complete cases is an issue. First we start with the leukocyte ratios - there should be large redundancy issues. This is even the case if no nonlinear modeling is applied.</p>
 <div class="cell">
 <p></p><details>
@@ -2333,8 +2336,8 @@ t_EOS I(t_BASO) t_NEU t_LYM MONO
 </div>
 </div>
 </section>
-<section id="redundancy-among-all-potential-predictors" class="level3" data-number="8.2.3">
-<h3 data-number="8.2.3" class="anchored" data-anchor-id="redundancy-among-all-potential-predictors"><span class="header-section-number">8.2.3</span> Redundancy among all potential predictors</h3>
+<section id="redundancy-among-all-potential-predictors" class="level3" data-number="9.2.3">
+<h3 data-number="9.2.3" class="anchored" data-anchor-id="redundancy-among-all-potential-predictors"><span class="header-section-number">9.2.3</span> Redundancy among all potential predictors</h3>
 <p>Now we perform a full redundancy analysis, but omitting WBC, the leukocyte ratio variables, and BUN and KREA (for their use in constructing BUN_CREA and eGFR).</p>
 <div class="cell">
 <p></p><details>
@@ -2414,8 +2417,8 @@ I(t_EOS) I(t_BASO) t_LYM MONO t_NEU AGE SEX t_BUN_CREA eGFR POTASS FIB CRP t_ASA
 <p>This analysis suggests that HCT, MCH, HGB and MPV may be redundant on top of the other variables. Note that BUN, CREA and WBC were already omitted from this redundancy analysis.</p>
 </section>
 </section>
-<section id="section-session-info" class="level2" data-number="8.3">
-<h2 data-number="8.3" class="anchored" data-anchor-id="section-session-info"><span class="header-section-number">8.3</span> Section session info</h2>
+<section id="section-session-info" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="section-session-info"><span class="header-section-number">9.3</span> Section session info</h2>
 <div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.1.2 (2021-11-01)
@@ -2548,7 +2551,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <div class="page-navigation ">
   <div class="nav-page nav-page-previous">
       <a href="./Bact_univar.html">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Univariate distribution checks</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Univariate distribution checks</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
