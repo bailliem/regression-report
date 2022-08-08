@@ -122,15 +122,15 @@ b_bact %>%
 
 ### Suggested transformations
 
-Next we investigate whether a transformation of continuous variables may improve any further analyses to reduce disproportional impact of highly influential points, also in multivariate summaries. We employ a function `ida_trans` for this purpose, which optimises the parameter `sigma` of the pseudo-logarithm for that purpose. The optimization targets the best possible linear correlation of the transformed values with normal deviates. If no better transformation can be found, no transformation is suggested.
+Next we investigate whether a transformation of continuous variables may improve any further analyses to reduce disproportional impact of highly influential points, also in multivariate summaries. We employ a function `ida_trans` for this purpose, which optimises the parameter `sigma` of the pseudo-logarithm for that purpose. The optimization targets the best possible linear correlation of the transformed values with normal deviates. If no better transformation can be found, or if the improvement in correlation is less than 0.1 correlation units, no transformation is suggested.
 
 ```{r}
 variables<- c("AGE", structural_vars, key_predictors, leuko_related_vars, leuko_ratio_vars, kidney_related_vars, acute_related_vars, remaining_vars)
 unique.variables <- unique(variables)
 
-res<-sapply(unique.variables, function(X) ida_trans(b_bact[,X])$const) #takes long, calculate once, and save?
-
+res<-sapply(unique.variables, function(X) ida_trans(b_bact[,X], equ.marg=0.2)$const) #takes long, calculate once, and save?
 res
+mean(!is.na(res))
 ```
 
 Register transformed variables in the data set:

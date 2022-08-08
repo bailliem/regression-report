@@ -47,6 +47,7 @@ Covariates with assumed strong association with bacteremia:
   + leukocyte count
   + use of central venous catheter
   + length of hospitalization
+  
 
 * Bates 1997
   + Suspected or documented focal infection at onset
@@ -55,6 +56,7 @@ Covariates with assumed strong association with bacteremia:
   + Hickman catheter present
   + altered mental status within 24h
   + focal abdominal signs withing 24h
+  
 
 * Lee (2012)
   + age
@@ -64,11 +66,13 @@ Covariates with assumed strong association with bacteremia:
   + blood urea nitrogen
   + blood urea nitrogen/creatinine ratio
   + thrombocytopenia
+  
 
 * Tudela (2010)
   + Charlson index
   + PCT
-
+  
+  
 * Kuppermann (1998)
   + age
   + temperature
@@ -76,7 +80,8 @@ Covariates with assumed strong association with bacteremia:
   + WBC count
   + absolute neutrophil count
   + absolute band count
-
+  
+  
 It has to be admitted that some of these selections are based on inappropriate methods, e.g., use of univariate logistic regression screening, or were derived for special settings or cohorts, e.g. use in emergency room, or use in children.
 
 Out of the set of variables used in the models of the cited 5 papers, the following six variables also available in our data set and are considered as very important predictors (VIPs):
@@ -249,7 +254,20 @@ The data dictionary can also be found [in this repository]  (https://github.com/
 
 ## References
 
+Bates DW, Sands K, Miller E, Lanken PN, Hibberd PL, et al. (1997) Predicting bacteremia in patients with sepsis syndrome. Journal of Infectious Diseases 176: 1538–1551.
+
+Jaimes F, Arango C, Ruiz G, Cuervo J, Botero J, et al. (2004) Predicting bacteremia at the bedside. Clinical Infectious Diseases 38: 357–362.
+
+Lee CC, Wu CJ, Chi CH, Lee NY, Chen PL, et al. (2012) Prediction of community-onset bacteremia among febrile adults visiting an emergency department: rigor matters. Diagnostic Microbiology and Infectious Disease 73: 168–173.
+
+Kuppermann N, Fleisher GR, Jaffe DM (1998) Predictors of occult pneumococcal bacteremia in young febrile children. Annals of Emergency Medicine 31: 679–687.
+
 Ratzinger, F., Dedeyan, M., Rammerstorfer, M., Perkmann, T., Burgmann, H., Makristathis, A., Dorffner, G., Lötsch, F., Blacky, A., Ramharter, M., 2014. A Risk Prediction Model for Screening Bacteremic Patients: A Cross Sectional Study. PLOS ONE 9, e106765. doi:[10.1371/journal.pone.0106765](https://dx.doi.org/10.1371/journal.pone.0106765)
+
+
+Tudela P, Lacoma A, Prat C, Modol JM, Gimenez M, et al. (2010) Prediction of bacteremia in patients with suspicion of infection in emergency room. Medicina Clinica 135: 685–690.
+
+
 
 ```{r}
 

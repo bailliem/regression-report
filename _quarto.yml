@@ -18,6 +18,7 @@ book:
     - Bact_intro.qmd
     - Bact_SAP.qmd
     - Bact_missing.qmd
+    - Pseudo_log_explainer.qmd
     - Bact_univar.qmd ## long running jobs - use ARd or freeze
     - Bact_multivar.qmd
     - references.qmd
