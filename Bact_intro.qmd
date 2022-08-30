@@ -1,5 +1,4 @@
-# Bacteremia {#Bacteremia}
-
+# Bacteremia study  {#Bacteremia}
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, echo=FALSE}
 ## Load libraries for this chapter
@@ -8,9 +7,13 @@ library(tidyverse)
 library(Hmisc)
 ```
 
-# Introduction to Bacteremia
 
-To demonstrate the workflow and content of IDA, we created a hypothetical research aim and corresponding statistical analysis plan, which is described in more detail in the section [Bact_SAP.Rmd](Bact_SAP.Rmd).
+
+## Hypothetical research aim
+
+We will exemplify our proposed systematic approach to data screening by means of a diagnostic study with the primary aim of using age, sex and 49 laboratory variables to fit a diagnostic prediction model for the bacteremia status (= presence of bacteria in the blood stream) of a blood sample. A secondary aim of the study is to describe the functional form of each predictor in the model. Between January 2006 and December 2010, patients with the clinical suspicion to suffer from bacteremia were included if blood culture analysis was requested by the responsible physician and blood was sampled for assessment of hematology and biochemistry. An analysis of this study can be found in Ratzinger et al: "A Risk Prediction Model for Screening Bacteremic Patients: A Cross Sectional Study"  [Ratzinger et al, PLoS One 2014](https://doi.org/10.1371/journal.pone.0106765).
+
+To demonstrate the workflow and content of IDA, we created a hypothetical research aim and corresponding statistical analysis plan, which is described in more detail in the section [Bact_IDA_plan.qmd](Bact_IDA_plan.qmd).
 
 **Hypothetical research aim for IDA** is to develop a multivariable diagnostic model for bacteremia using 49 continuous laboratory blood parameters, age and gender with the primary aim of prediction and a secondary aim of describing the association of each variable with the outcome ('explaining' the multivariable model). 
 
@@ -19,16 +22,16 @@ A diagnostic prediction model was developed based on this data set and validated
 
 ## Dataset Description
 
-Ratzinger et al (2014) performed a diagnostic study in which age, sex and 49 laboratory variables can be used to diagnose bacteremia status  of a blood sample using a multivariable model.  Between January 2006 and December 2010, patients with the clinical suspicion to suffer from bacteraemia were included if blood culture analysis was requested by the responsible physician and blood was sampled for assessment of haematology and biochemistry. The data consists of 14,691 observations from different patients.
-
-Our version of this data was slightly modified compared to original version, and this modified version was cleared by the Medical University of Vienna for public use (DC 2019-0054). Variable names have been kept as they were (partly German abbreviations). A data dictionary is available in the **misc** folder of the project directory ('bacteremia-DataDictionary.csv').
-
-In the original paper describing the study [(Ratzinger et al, PLoS One 2014)](https://doi.org/10.1371/journal.pone.0106765), a machine learning approach was taken to diagnose a positive status of blood culture. The true status was determined for all blood samples by blood culture analysis, which is the gold standard. Here we will make use of a multivariable logistic regression model.
+The data consists of 14,691 observations from different patients and 51 potential predictors. To protect data privacy our version of this data was slightly modified compared to the original version, and this modified version was cleared by the Medical University of Vienna for public use (DC 2019-0054). Compared to the official results given in Ratzinger et al (2014), our results may differ to a negligible degree.  
 
 
-## Bacteremia dataset contents
+In the original paper describing the study [(Ratzinger et al, PLoS One 2014)](https://doi.org/10.1371/journal.pone.0106765), a machine learning approach was taken to diagnose a positive status of blood culture. The true status was determined for all blood samples by blood culture analysis, which is the gold standard. 
 
-### Source dataset 
+
+
+
+
+## Source dataset 
 
 We refer to the source data set as the dataset available in this repository.
 

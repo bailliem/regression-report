@@ -16,7 +16,7 @@ book:
     - scope.qmd
     - data_screen.qmd
     - Bact_intro.qmd
-    - Bact_SAP.qmd
+    - Bact_IDA_plan.qmd
     - Bact_missing.qmd
     - Pseudo_log_explainer.qmd
     - Bact_univar.qmd ## long running jobs - use ARd or freeze
