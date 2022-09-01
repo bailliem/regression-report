@@ -80,7 +80,7 @@ b_bact %>%
   mutate(All_predictors = ifelse(apply(b_bact,1,function(X) 1-any_miss(X)),NA,1)) %>%
   mutate(Structural_variables = ifelse(apply(b_bact[,structural_vars],1,function(X) 1-any_miss(X)),NA,1)) %>%
   mutate(Key_predictors = ifelse(apply(b_bact[,c(key_predictors)],1,function(X) 1-any_miss(X)),NA,1)) %>%
-  mutate(Predictors_of_medium_importance = ifelse(apply(b_bact[,c(medimp_predictors)],1,function(X) 1-any_miss(X)),NA,1)) %>%
+  mutate(Key_and_medium_importance_predictors = ifelse(apply(b_bact[,c(key_predictors,medimp_predictors)],1,function(X) 1-any_miss(X)),NA,1)) %>%
   group_by(GENDER, AGEGROUP) %>%
   miss_var_summary(order=FALSE) %>%
   gt::gt() %>%

@@ -17,61 +17,60 @@ load(here::here("data", "bact_env_b.rda"))
 
 ## Data set overview
 
-Using the [Hmisc](https://cran.r-project.org/web/packages/Hmisc/) describe function, we provide an overview of the data set. The descriptive report also provides histograms of continuous variables. For ease of scanning the information, we group the report by measurement type.
+Using the [Hmisc](https://cran.r-project.org/web/packages/Hmisc/) describe function, we provide an overview of the univariate distributions of all predictors in the data set. The descriptive report also provides histograms of continuous variables. For ease of scanning the information, we group the report by the predictor sets.
 
-### Demographic variables
+@Mark in the IDA plan we also have SD, and skewness and curtosis, which are not output by describe. Should we generate our own table with the requested statistics according to the IDA plan?
+
+
+### Outcome variable
 
 ```{r desc_b_bact_1, message = FALSE, results='asis', warning=FALSE, , echo=FALSE}
 b_bact %>%
-  dplyr::select(all_of(demog_vars)) %>%
-  Hmisc::describe(descript = "Demographic variables") %>%
+  dplyr::select(BloodCulture, BC) %>%
+  Hmisc::describe(descript = "Outcome variable") %>%
   Hmisc::html(size = 80)
 ```
 
-### Structural covariates and key predictors
+
+### Structural variables
+
+
+
+
+```{r desc_b_bact_1, message = FALSE, results='asis', warning=FALSE, , echo=FALSE}
+b_bact %>%
+  dplyr::select(all_of(structural_vars)) %>%
+  Hmisc::describe(descript = "Structural variables") %>%
+  Hmisc::html(size = 80)
+```
+
+### Key predictors
 
 ```{r desc_b_bact_2, message = FALSE, results='asis', warning=FALSE, , echo=FALSE}
 b_bact %>%
-  dplyr::select(all_of(c(structural_vars, key_predictors))) %>%
-  Hmisc::describe(descript = "Structural covariates and key predictors") %>%
+  dplyr::select(all_of(c(key_predictors))) %>%
+  Hmisc::describe(descript = "ey predictors") %>%
   Hmisc::html(size = 80)
 ```
 
-### Further variables related to leukocyte types and leukocyte ratios
+### Predictors of medium importance
 
 ```{r desc_b_bact_3, message = FALSE, results='asis', warning=FALSE, echo=FALSE}
 b_bact %>%
-  dplyr::select(all_of(c(leuko_related_vars,leuko_ratio_vars))) %>%
-  Hmisc::describe(descript = "Leukocyte related variables and leukocyte ratios") %>%
+  dplyr::select(all_of(c(medimp_predictors))) %>%
+  Hmisc::describe(descript = "Predictors of medium importance") %>%
   Hmisc::html(size = 80)
 ```
 
-### Kidney function related variables
+### All other predictors
 
 ```{r desc_b_bact_4, message = FALSE, results='asis', warning=FALSE, echo=FALSE}
 b_bact %>%
-  dplyr::select(all_of(c(kidney_related_vars))) %>%
-  Hmisc::describe(descript = "Kidney function related variables") %>%
+  dplyr::select(all_of(remaining_predictors)) %>%
+  Hmisc::describe(descript = "Remaining predictors") %>%
   Hmisc::html(size = 80)
 ```
 
-### Acute phase reaction related variables
-
-```{r desc_b_bact_5, message = FALSE, results='asis', warning=FALSE, echo=FALSE}
-b_bact %>%
-  dplyr::select(all_of(c(acute_related_vars))) %>%
-  Hmisc::describe(descript = "Acute phase related variables") %>%
-  Hmisc::html(size = 80)
-```
-
-### Remaining variables
-
-```{r desc_b_bact_6, message = FALSE, results='asis', warning=FALSE, echo=FALSE}
-b_bact %>%
-  dplyr::select(all_of(c(remaining_vars))) %>%
-  Hmisc::describe(descript = "Remaining variables") %>%
-  Hmisc::html(size = 80)
-```
 
 ## Categorical variables
 
@@ -118,19 +117,77 @@ b_bact %>%
 
 ```
 
+
 ## Continuous variables
+
+
+### Univariate distribution with variables using only the original variable without the suggested transformations
+
+```{r}
+for(j in 1:length(unique.variables)){
+  print(ida_plot_univar(b_bact, unique.variables[j], sigma=res[j], n_bars=100, transform = FALSE))
+#  if(!is.na(res[j])){
+#    print(ida_plot_univar(b_bact, paste("t_",variables[j],sep="")))
+#  }
+}
+```
+
+### Analysis of clumping
+
+@Mark: I would need a function that describes 'clumping', i.e. the five most frequent unique values should be printed along with their frequencies. I used `tail(sort(table(variable),5)[1:5]` but there are certainly more elegant ways. Ideally, that would be included in the information that ´describe()´ produces. One could also compute the degree of clumping as the relative frequency of the most frequent value of a variable (among non-na's) and create a lollipop plot with those values.
+
+#### Structural variables
+
+```{r}
+for(j in 1:length(structural_vars)){
+  five_most <- head(- sort(-table(b_bact[,structural_vars[j]])),5)
+  cat("\n\n Structural variable: ", structural_vars[j], "\n")
+  print(five_most)
+}
+
+```
+
+#### Key predictors
+
+```{r}
+for(j in 1:length(key_predictors)){
+  cat("\n\n Predictor: ", key_predictors[j], "\n")
+  print(head(- sort(-table(b_bact[,key_predictors[j]])),5))
+}
+```
+
+#### Predictors of medium importance
+
+```{r}
+for(j in 1:length(medimp_predictors)){
+  cat("\n\n Predictor: ", medimp_predictors[j], "\n")
+  print(head(- sort(-table(b_bact[,medimp_predictors[j]])),5))
+}
+```
+
+#### Remaining predictors
+
+```{r}
+for(j in 1:length(remaining_predictors)){
+  cat("\n\n Predictor: ", remaining_predictors[j], "\n")
+  print(head(- sort(-table(b_bact[,remaining_predictors[j]])),5))
+}
+```
+
 
 ### Suggested transformations
 
-Next we investigate whether a transformation of continuous variables may improve any further analyses to reduce disproportional impact of highly influential points, also in multivariate summaries. We employ a function `ida_trans` for this purpose, which optimises the parameter `sigma` of the pseudo-logarithm for that purpose. The optimization targets the best possible linear correlation of the transformed values with normal deviates. If no better transformation can be found, or if the improvement in correlation is less than 0.1 correlation units, no transformation is suggested.
+Next we investigate whether a transformation of continuous variables may improve any further analyses to reduce disproportional impact of highly influential points, also in multivariate summaries. We employ a function `ida_trans` for this purpose, which optimises the parameter `sigma` of the pseudo-logarithm for that purpose. The optimization targets the best possible linear correlation of the transformed values with normal deviates. If no better transformation can be found, or if the improvement in correlation is less than 0.2 correlation units, no transformation is suggested.
 
 ```{r}
-variables<- c("AGE", structural_vars, key_predictors, leuko_related_vars, leuko_ratio_vars, kidney_related_vars, acute_related_vars, remaining_vars)
+variables<- c(structural_vars, key_predictors, medimp_predictors, remaining_predictors)
 unique.variables <- unique(variables)
 
 res<-sapply(unique.variables, function(X) ida_trans(b_bact[,X], equ.marg=0.2)$const) #takes long, calculate once, and save?
 res
-mean(!is.na(res))
+cat("Predictors where a transformation may symmetrize the distribution:\n")
+cat("Number:     ", sum(!is.na(res)), "\n")
+cat("Proportion: ", mean(!is.na(res)), "\n")
 ```
 
 Register transformed variables in the data set:
@@ -166,16 +223,7 @@ for(j in 1:length(bact_variables)){
 
 ```
 
-### Univariate distribution with variables using the original variable and the suggested transformations
 
-```{r}
-for(j in 1:length(unique.variables)){
-  print(ida_plot_univar(b_bact, unique.variables[j], sigma=res[j], n_bars=100))
-#  if(!is.na(res[j])){
-#    print(ida_plot_univar(b_bact, paste("t_",variables[j],sep="")))
-#  }
-}
-```
 
 ### Comparison of univariate distributions with and without pseudo-log transformation
 
@@ -195,29 +243,7 @@ save(list=c("c_bact", "bact_variables", "sigma_values", "bact_transformed"),
      file=here::here("data", "bact_env_c.rda"))
 ```
 
-### Univariate distribution with variables using only the original variable without the suggested transformations
 
-```{r}
-for(j in 1:length(unique.variables)){
-  print(ida_plot_univar(b_bact, unique.variables[j], sigma=res[j], n_bars=100, transform = FALSE))
-#  if(!is.na(res[j])){
-#    print(ida_plot_univar(b_bact, paste("t_",variables[j],sep="")))
-#  }
-}
-```
-
-### Comparison of univariate distributions with and without pseudo-log transformation
-
-The comparison is only shown for variables where a transformation is suggested.
-
-```{r, fig.width=12}
-for(j in 1:length(unique.variables)){
-#  print(ida_plot_univar_orig_vs_trans(b_bact, unique.variables[j], sigma=res[j], n_bars=100))
- if(!is.na(res[j])){
-   print(ida_plot_univar_orig_vs_trans(b_bact, unique.variables[j], sigma=res[j], n_bars=100))
- }
-}
-```
 
 ## Section session info
 
