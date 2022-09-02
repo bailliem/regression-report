@@ -42,7 +42,7 @@ structural_vars <- c("AGE", "SEX")
 key_predictors <- c("WBC", "AGE", "BUN","CREA","NEU","PLT")
 medimp_predictors <-c("POTASS", "FIB", "CRP", "ASAT", "ALAT", "GGT")
 outcome_vars <-c("BloodCulture", "BC")
-remaining_predictors <- names(a_bact)[is.na(match(names(a_bact),c("ID", structural_vars, medimp_predictors, outcome_vars)))]
+remaining_predictors <- names(a_bact)[is.na(match(names(a_bact),c("ID", structural_vars, key_predictors,medimp_predictors, outcome_vars)))]
 
 b_bact <- 
   a_bact %>% mutate(GENDER = factor(SEX, levels=c(1,2),labels=c("male", "female")), AGEGROUP = factor(cut(AGE, c(min(AGE)-1,50, 65, max(AGE))), labels=c("1:(15,50]","2:(50,65]","3:(65,101]")))

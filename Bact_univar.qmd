@@ -134,15 +134,20 @@ for(j in 1:length(unique.variables)){
 
 ### Analysis of clumping
 
-@Mark: I would need a function that describes 'clumping', i.e. the five most frequent unique values should be printed along with their frequencies. I used `tail(sort(table(variable),5)[1:5]` but there are certainly more elegant ways. Ideally, that would be included in the information that ´describe()´ produces. One could also compute the degree of clumping as the relative frequency of the most frequent value of a variable (among non-na's) and create a lollipop plot with those values.
+Here we report the number of distinct values, and the absolute and relative frequencies of the five most frequent values. We also compute a concentration ratio as the ratio of the frequency of the most frequent value and the mean frequency of each distinct value.
+
+@Mark: Is it possible to include this in the Hmisc::describe() function? Can we e.g. save the concentration ratios and show an ordinal plot with them?
 
 #### Structural variables
 
 ```{r}
-for(j in 1:length(structural_vars)){
-  five_most <- head(- sort(-table(b_bact[,structural_vars[j]])),5)
-  cat("\n\n Structural variable: ", structural_vars[j], "\n")
-  print(five_most)
+for(predictor in structural_vars){
+  cat("\n\n\nStructural variable: ", predictor, "\n\nDistinct values:\n", length(unique(b_bact[,predictor])),"\n\nMost frequent values:\n")
+  print(head(- sort(-table(b_bact[,predictor])),5))
+  cat("\nRelative frequencies:\n")
+  print(round(head(- sort(-table(b_bact[,predictor])),5)/sum(!is.na(b_bact[,predictor])),3))
+  cat("\nConcentration ratio:\n")
+  print(head(- sort(-table(b_bact[,predictor])),1)/mean(table(b_bact[,predictor])))
 }
 
 ```
@@ -150,27 +155,42 @@ for(j in 1:length(structural_vars)){
 #### Key predictors
 
 ```{r}
-for(j in 1:length(key_predictors)){
-  cat("\n\n Predictor: ", key_predictors[j], "\n")
-  print(head(- sort(-table(b_bact[,key_predictors[j]])),5))
+for(predictor in key_predictors){
+  cat("\n\n\nPredictor: ", predictor, "\n\nDistinct values:\n", length(unique(b_bact[,predictor])),"\n\nMost frequent values:\n")
+  print(head(- sort(-table(b_bact[,predictor])),5))
+  cat("\nRelative frequencies:\n")
+  print(round(head(- sort(-table(b_bact[,predictor])),5)/sum(!is.na(b_bact[,predictor])),3))
+  cat("\nConcentration ratio:\n")
+  print(head(- sort(-table(b_bact[,predictor])),1)/mean(table(b_bact[,predictor])))
+
 }
 ```
 
 #### Predictors of medium importance
 
 ```{r}
-for(j in 1:length(medimp_predictors)){
-  cat("\n\n Predictor: ", medimp_predictors[j], "\n")
-  print(head(- sort(-table(b_bact[,medimp_predictors[j]])),5))
+for(predictor in medimp_predictors){
+  cat("\n\n\nPredictor: ", predictor, "\n\nDistinct values:\n", length(unique(b_bact[,predictor])),"\n\nMost frequent values:\n")
+  print(head(- sort(-table(b_bact[,predictor])),5))
+  cat("\nRelative frequencies:\n")
+  print(round(head(- sort(-table(b_bact[,predictor])),5)/sum(!is.na(b_bact[,predictor])),3))
+  cat("\nConcentration ratio:\n")
+  print(head(- sort(-table(b_bact[,predictor])),1)/mean(table(b_bact[,predictor])))
+
 }
 ```
 
 #### Remaining predictors
 
 ```{r}
-for(j in 1:length(remaining_predictors)){
-  cat("\n\n Predictor: ", remaining_predictors[j], "\n")
-  print(head(- sort(-table(b_bact[,remaining_predictors[j]])),5))
+for(predictor in remaining_predictors){
+  cat("\n\n\nPredictor: ", predictor, "\n\nDistinct values:\n", length(unique(b_bact[,predictor])),"\n\nMost frequent values:\n")
+  print(head(- sort(-table(b_bact[,predictor])),5))
+  cat("\nRelative frequencies:\n")
+  print(round(head(- sort(-table(b_bact[,predictor])),5)/sum(!is.na(b_bact[,predictor])),3))
+  cat("\nConcentration ratio:\n")
+  print(head(- sort(-table(b_bact[,predictor])),1)/mean(table(b_bact[,predictor])))
+
 }
 ```
 
