@@ -6,75 +6,20 @@ This section reports a series of univariate summary checks of the bacteremia dat
 library(here)
 library(tidyverse)
 library(Hmisc)
+library(e1071)   # ADD for skewness and kurtosis
 source(here("R", "ida_plot_univar.R"))  ## function to plot univariate summaries. 
 source(here("R", "ida_plot_univar_orig_vs_trans.R"))  ## function for side-by-side comparison of original vs. transformed scale, calls ida_plot_univar.R
-source(here("R", "ida_trans.R"))  ## function to determine transformation (log(x+c) or identity). 
+source(here("R", "ida_trans.R"))  ## function to determine transformation (pseudolog(x, sigma) or identity). 
 
 ## Load the dataset.
 load(here::here("data", "bact_env_b.rda"))
 
 ```
 
-## Data set overview
 
-Using the [Hmisc](https://cran.r-project.org/web/packages/Hmisc/) describe function, we provide an overview of the univariate distributions of all predictors in the data set. The descriptive report also provides histograms of continuous variables. For ease of scanning the information, we group the report by the predictor sets.
+## U1: Categorical variables
 
-@Mark in the IDA plan we also have SD, and skewness and curtosis, which are not output by describe. Should we generate our own table with the requested statistics according to the IDA plan?
-
-
-### Outcome variable
-
-```{r desc_b_bact_1, message = FALSE, results='asis', warning=FALSE, , echo=FALSE}
-b_bact %>%
-  dplyr::select(BloodCulture, BC) %>%
-  Hmisc::describe(descript = "Outcome variable") %>%
-  Hmisc::html(size = 80)
-```
-
-
-### Structural variables
-
-
-
-
-```{r desc_b_bact_1, message = FALSE, results='asis', warning=FALSE, , echo=FALSE}
-b_bact %>%
-  dplyr::select(all_of(structural_vars)) %>%
-  Hmisc::describe(descript = "Structural variables") %>%
-  Hmisc::html(size = 80)
-```
-
-### Key predictors
-
-```{r desc_b_bact_2, message = FALSE, results='asis', warning=FALSE, , echo=FALSE}
-b_bact %>%
-  dplyr::select(all_of(c(key_predictors))) %>%
-  Hmisc::describe(descript = "ey predictors") %>%
-  Hmisc::html(size = 80)
-```
-
-### Predictors of medium importance
-
-```{r desc_b_bact_3, message = FALSE, results='asis', warning=FALSE, echo=FALSE}
-b_bact %>%
-  dplyr::select(all_of(c(medimp_predictors))) %>%
-  Hmisc::describe(descript = "Predictors of medium importance") %>%
-  Hmisc::html(size = 80)
-```
-
-### All other predictors
-
-```{r desc_b_bact_4, message = FALSE, results='asis', warning=FALSE, echo=FALSE}
-b_bact %>%
-  dplyr::select(all_of(remaining_predictors)) %>%
-  Hmisc::describe(descript = "Remaining predictors") %>%
-  Hmisc::html(size = 80)
-```
-
-
-## Categorical variables
-
-We now provide a closer visual examination of the categorical predictors.
+SEX and BC (bactermia status) are described by frequencies and proportions in each category.
 
 ```{r catplot, message=FALSE, warning =FALSE , echo=FALSE}
 b_bact %>%
@@ -121,83 +66,82 @@ b_bact %>%
 ## Continuous variables
 
 
-### Univariate distribution with variables using only the original variable without the suggested transformations
+### U2: Univariate distributions of continuous variables
+
+#### U2: Structural variables
+
+The only structural continuous variables is AGE. This variable is also a key predictor (see below).
+
+
+#### U2: Key predictors
+
 
 ```{r}
+unique.variables <- key_predictors
 for(j in 1:length(unique.variables)){
-  print(ida_plot_univar(b_bact, unique.variables[j], sigma=res[j], n_bars=100, transform = FALSE))
-#  if(!is.na(res[j])){
-#    print(ida_plot_univar(b_bact, paste("t_",variables[j],sep="")))
-#  }
+  print(ida_plot_univar(b_bact, unique.variables[j], sigma=NA, n_bars=100, transform = FALSE))
 }
 ```
 
-### Analysis of clumping
-
-Here we report the number of distinct values, and the absolute and relative frequencies of the five most frequent values. We also compute a concentration ratio as the ratio of the frequency of the most frequent value and the mean frequency of each distinct value.
-
-@Mark: Is it possible to include this in the Hmisc::describe() function? Can we e.g. save the concentration ratios and show an ordinal plot with them?
-
-#### Structural variables
+#### U2: Predictors of medium importance
 
 ```{r}
-for(predictor in structural_vars){
-  cat("\n\n\nStructural variable: ", predictor, "\n\nDistinct values:\n", length(unique(b_bact[,predictor])),"\n\nMost frequent values:\n")
-  print(head(- sort(-table(b_bact[,predictor])),5))
-  cat("\nRelative frequencies:\n")
-  print(round(head(- sort(-table(b_bact[,predictor])),5)/sum(!is.na(b_bact[,predictor])),3))
-  cat("\nConcentration ratio:\n")
-  print(head(- sort(-table(b_bact[,predictor])),1)/mean(table(b_bact[,predictor])))
+unique.variables <- unique(medimp_predictors)
+for(j in 1:length(unique.variables)){
+  print(ida_plot_univar(b_bact, unique.variables[j], sigma=NA, n_bars=100, transform = FALSE))
 }
-
 ```
+
+#### U2: Remaining predictors
+
+```{r}
+unique.variables <- unique(remaining_predictors)
+for(j in 1:length(unique.variables)){
+  print(ida_plot_univar(b_bact, unique.variables[j], sigma=NA, n_bars=100, transform = FALSE))
+}
+```
+
+### Numerical summaries
+
+COMMENT @Mark is there a way to make nicer looking tables out of the numerical summaries??
 
 #### Key predictors
 
 ```{r}
-for(predictor in key_predictors){
-  cat("\n\n\nPredictor: ", predictor, "\n\nDistinct values:\n", length(unique(b_bact[,predictor])),"\n\nMost frequent values:\n")
-  print(head(- sort(-table(b_bact[,predictor])),5))
-  cat("\nRelative frequencies:\n")
-  print(round(head(- sort(-table(b_bact[,predictor])),5)/sum(!is.na(b_bact[,predictor])),3))
-  cat("\nConcentration ratio:\n")
-  print(head(- sort(-table(b_bact[,predictor])),1)/mean(table(b_bact[,predictor])))
-
+unique.variables <- unique(key_predictors)
+for(j in 1:length(unique.variables)){
+  cat("Numerical summary of ", unique.variables[j],"(",label(b_bact[,unique.variables[j]]), "[", units(b_bact[,unique.variables[j]]), "]):\n\n")
+  print(main_descriptives(b_bact[,unique.variables[j]]))
 }
 ```
+
+
 
 #### Predictors of medium importance
 
 ```{r}
-for(predictor in medimp_predictors){
-  cat("\n\n\nPredictor: ", predictor, "\n\nDistinct values:\n", length(unique(b_bact[,predictor])),"\n\nMost frequent values:\n")
-  print(head(- sort(-table(b_bact[,predictor])),5))
-  cat("\nRelative frequencies:\n")
-  print(round(head(- sort(-table(b_bact[,predictor])),5)/sum(!is.na(b_bact[,predictor])),3))
-  cat("\nConcentration ratio:\n")
-  print(head(- sort(-table(b_bact[,predictor])),1)/mean(table(b_bact[,predictor])))
-
+unique.variables <- unique(medimp_predictors)
+for(j in 1:length(unique.variables)){
+  cat("Numerical summary of ", unique.variables[j],"(",label(b_bact[,unique.variables[j]]), "[", units(b_bact[,unique.variables[j]]), "]):\n\n")
+  print(main_descriptives(b_bact[,unique.variables[j]]))
 }
 ```
 
 #### Remaining predictors
 
 ```{r}
-for(predictor in remaining_predictors){
-  cat("\n\n\nPredictor: ", predictor, "\n\nDistinct values:\n", length(unique(b_bact[,predictor])),"\n\nMost frequent values:\n")
-  print(head(- sort(-table(b_bact[,predictor])),5))
-  cat("\nRelative frequencies:\n")
-  print(round(head(- sort(-table(b_bact[,predictor])),5)/sum(!is.na(b_bact[,predictor])),3))
-  cat("\nConcentration ratio:\n")
-  print(head(- sort(-table(b_bact[,predictor])),1)/mean(table(b_bact[,predictor])))
-
+unique.variables <- unique(remaining_predictors)
+for(j in 1:length(unique.variables)){
+  cat("Numerical summary of ", unique.variables[j],"(",label(b_bact[,unique.variables[j]]), "[", units(b_bact[,unique.variables[j]]), "]):\n\n")
+  print(main_descriptives(b_bact[,unique.variables[j]]))
 }
 ```
 
 
+
 ### Suggested transformations
 
-Next we investigate whether a transformation of continuous variables may improve any further analyses to reduce disproportional impact of highly influential points, also in multivariate summaries. We employ a function `ida_trans` for this purpose, which optimises the parameter `sigma` of the pseudo-logarithm for that purpose. The optimization targets the best possible linear correlation of the transformed values with normal deviates. If no better transformation can be found, or if the improvement in correlation is less than 0.2 correlation units, no transformation is suggested.
+Next we investigate whether a pseudolog transformation of continuous variables may substantially symmetrize the univariate distributions of the continuous variables, and may hence be useful for multivariate summaries.  We employ a function `ida_trans` for this purpose, which optimises the parameter `sigma` of the pseudo-logarithm for that purpose. The optimization targets the best possible linear correlation of the transformed values with normal deviates. If no better transformation can be found, or if the improvement in correlation is less than 0.2 correlation units, no transformation is suggested.
 
 ```{r}
 variables<- c(structural_vars, key_predictors, medimp_predictors, remaining_predictors)
@@ -252,10 +196,12 @@ The comparison is only shown for variables where a transformation is suggested.
 ```{r, fig.width=12}
 for(j in 1:length(unique.variables)){
 #  print(ida_plot_univar_orig_vs_trans(b_bact, unique.variables[j], sigma=res[j], n_bars=100))
- if(!is.na(res[j])){
-   print(ida_plot_univar_orig_vs_trans(b_bact, unique.variables[j], sigma=res[j], n_bars=100))
+ if(!is.na(sigma_values[j])){
+   print(ida_plot_univar_orig_vs_trans(c_bact, unique.variables[j], sigma=sigma_values[j], n_bars=100))
  }
 }
+
+## COMMENT @Mark we must pick two from these plots for the paper - the old version has BUN which is now no longer transformed (as we raised the threshold for indicating relevance of a  pseudolog transformation) I would suggest ASAT and GGT. Can you please produce a TIF plot for these two (similar to what we already have in the paper?)
 ```
 
 ```{r}

@@ -1,4 +1,6 @@
-# Supplementary Example
+# Supplementary Examples: R notebook
+
+This R notebook includes the full code of the examples presented in the supplement to the paper.
 
 ```{r setup, echo = FALSE, message = FALSE, warning = FALSE}
 library(here)
@@ -58,13 +60,13 @@ scaled_brier <- function(model){
 
 ```{r}
 # define key predictors without pseudo-log trafo ('orig') and transformed ('trans'), replace WBC with WBC_noNEU
-key_predictors_orig  <- bact_variables$vip_vars %>%
+key_predictors_orig  <- bact_variables$key_predictors %>%
   str_replace('WBC', 'WBC_noNEU')
-key_predictors_trans <- bact_transformed$vip_vars %>%
+key_predictors_trans <- bact_transformed$key_predictors %>%
   str_replace('WBC', 'WBC_noNEU')
 
 # include only complete cases
-model_df_complete <- c_bact[c('BC', unique(c(bact_variables$vip_vars, bact_transformed$vip_vars)))] %>%
+model_df_complete <- c_bact[c('BC', unique(c(bact_variables$key_predictors, bact_transformed$key_predictors)))] %>%
   mutate(
     WBC_noNEU = WBC - NEU
   ) %>%
@@ -96,7 +98,7 @@ global_formula <- paste0('BC ~ ', paste(paste0(paste0('fp(', key_predictors_tran
 
 fit_mfp_complete <- mfp(as.formula(global_formula),
                         data = model_df_complete,
-                        family = binomial)
+                        family = binomial, alpha=0.05)
 
 # save global formula with fp-trafos
 global_formula_fp <- paste('BC ~ ', paste0(tidy(fit_mfp_complete)$term[-1], collapse = ' + '))

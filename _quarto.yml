@@ -8,19 +8,21 @@ execute:
 
 book:
   title: "Regression without regrets"
-  author: "S. Hödlmoser, M. Baillie, G. Heinze & M. Huebner"
-  date: "7/13/2022"
+  author: "M. Baillie, G. Heinze & M. Huebner"   ## changed
+  date: "11/14/2022"  ## changed
   chapters:
-    - index.qmd
-    - IDA_framework.qmd
-    - scope.qmd
-    - data_screen.qmd
-    - Bact_intro.qmd
-    - Bact_IDA_plan.qmd
-    - Bact_missing.qmd
-    - Pseudo_log_explainer.qmd
+    - index.qmd  ## REMOVE
+    - IDA_framework.qmd ## REMOVE
+    - scope.qmd ## REMOVE
+    - data_screen.qmd ## REMOVE
+    - Bact_intro.qmd ## KEEP
+    - Bact_IDA_plan.qmd ## KEEP
+    - Bact_missing.qmd ## KEEP
+    - Pseudo_log_explainer.qmd ## KEEP
     - Bact_univar.qmd ## long running jobs - use ARd or freeze
-    - Bact_multivar.qmd
+    - Bact_multivar.qmd ## KEEP
+    - Bact_suppl.qmd ## ADD
+    - Pseudo_log_explainer.qmd ## ADD
     - references.qmd
 
 bibliography: references.bib

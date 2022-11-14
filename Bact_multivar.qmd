@@ -18,13 +18,14 @@ variables <- unique(c(bact_transformed$structural_vars,
                       bact_transformed$key_predictors,
                       bact_transformed$medimp_predictors,
                       bact_transformed$remaining_predictors))
+
 ```
 
 
 
-## Association with structural variables (V1)
+## V1: Association with structural variables
 
-A scatterplot of each predictor with age, separate for males and females. Associated Spearman correlation coefficients.
+A scatterplot of each predictor with age, with different panels for males and females have been constructed. Associated Spearman correlation coefficients have been computed.
 
 ### Key predictors
 
@@ -37,7 +38,8 @@ for(j in 1:length(bact_transformed$key_predictors)){
   
     spear_sex<-by(c_bact[,c("AGE",predictor)], c_bact$GENDER, FUN=function(X) data = cor(X,use="pairwise.complete.obs",method="spearman")[1,2])
     cat("\n\nSpearman correlation coefficients of AGE with ", predictor, ":\n", paste(c("male", "female"), round(spear_sex,3), sep=":" ))
-  # @Mark: is there some way to print the spearman correlation coefficients (spear_sex) into the graphs or into the column labels (in a standardized way)??
+  # COMMENT @Mark: is there some way to print the spearman correlation coefficients (spear_sex) into the graphs or into the column labels (in a standardized way)??
+    # COMMENT @Mark: can we display inverse pseudolog (back-transformed) y-axis labels for better interpretation? see function inv_pseudo_log() in ida_trans.R
 
   }
 }
@@ -54,7 +56,7 @@ for(j in 1:length(bact_transformed$medimp_predictors)){
   
     spear_sex<-by(c_bact[,c("AGE",predictor)], c_bact$GENDER, FUN=function(X) data = cor(X,use="pairwise.complete.obs",method="spearman")[1,2])
     cat("\n\nSpearman correlation coefficients of AGE with ", predictor, ":\n", paste(c("male", "female"), round(spear_sex,3), sep=":" ))
-  # @Mark: is there some way to print the spearman correlation coefficients (spear_sex) into the graphs (in a standardized way)??
+  # @Mark: see comments above
 
 }
 
@@ -70,14 +72,14 @@ for(j in 1:length(bact_transformed$remaining_predictors)){
   
     spear_sex<-by(c_bact[,c("AGE",predictor)], c_bact$GENDER, FUN=function(X) data = cor(X,use="pairwise.complete.obs",method="spearman")[1,2])
     cat("\n\nSpearman correlation coefficients of AGE with ", predictor, ":\n", paste(c("male", "female"), round(spear_sex,3), sep=":" ))
-  # @Mark: is there some way to print the spearman correlation coefficients (spear_sex) into the graphs (in a standardized way)??
+  # @Mark: see comments above
 
 }
 
 ```
 
 
-## Correlation coefficients between all predictors (V2)
+## V2: Correlation coefficients between all predictors
 
 
 ```{r}
@@ -93,7 +95,7 @@ The Spearman correlation coefficients are depicted in a quadratic heat map:
 ggcorrplot(corrs, tl.cex=5, tl.srt=90)
 ```
 
-## Comparing nonparametric and parametric predictor correlation (VE1)
+### VE1: Comparing nonparametric and parametric predictor correlation
 
 ```{r}
 # differences of pearson and spearman correlations to check for outliers
@@ -104,7 +106,11 @@ corrp <- c_bact %>%
 
 corrd <- corrp-corrs
 
-ggcorrplot(corrd, tl.cex=5, tl.srt=90)
+# sparsified differences of correlation coefficients
+corrd_sp <- corrd
+corrd_sp[abs(corrd)<0.1] <-0
+
+ggcorrplot(corrd_sp, tl.cex=5, tl.srt=90)
 
 ```
 Predictor pairs for which Spearman and Pearson correlation coefficients differ by more than 0.1 correlation units will be depicted in scatterplots:
@@ -117,14 +123,14 @@ for(j in 1:(length(variables)-1)){
   }
 }
 
-
+## COMMENT @Mark can we print pearson and spearman correlation coefficients into/over the graphs?
 
 ```
 
 
-## Variable clustering (VE2)
+### VE2: Variable clustering
 
-A variable clustering analysis will be performed to evaluate which predictors are closely associated. The dendrogram groups predictors by their correlation.
+A variable clustering analysis has been performed to evaluate which predictors are closely associated. The dendrogram groups predictors by their correlation.
 
 ```{r}
 vc_bact<-Hmisc::varclus(as.matrix(c_bact[,variables]))
@@ -144,16 +150,12 @@ for(j in 1:(length(variables)-1)){
 
 ```
 
-## Redundancy (VE3)
+### VE3: Redundancy
 
-Variance inflation factors will be computed between the candidate predictors. This will be done for the three possible candidate models, and using all complete cases in the respective candidate predictor sets.  Since $VIF = (1-R^2)^{-1}$, we will also report the multiple R-squared values.
-
-
-### VIFs from linear models between the predictors
+Variance inflation factors (VIF) will be computed between the candidate predictors. This will be done for the three possible candidate models, and using all complete cases in the respective candidate predictor sets.  Since $VIF = (1-R^2)^{-1}$, we also report the multiple R-squared values. Redundancy was further  explored by computing parametric additive models for each predictor in the key predictor model and the extended predictor model. VIFs and multiple $R^2$ are reported from those models, again for the three predictor sets.
 
 
-
-#### Key predictor model
+#### VIF for key predictor model
 
 ```{r}
 formula <- as.formula(paste(c("~",paste(bact_variables$key_predictors, collapse="+")), collapse=""))
@@ -170,7 +172,7 @@ cat("\nMultiple R-squared:\n")
 print(round(red$rsq1,4))
 ```
 
-#### Key predictors and predictors of medium importance
+#### VIF for model with key predictors and predictors of medium importance
 
 ```{r}
 formula <- as.formula(paste(c("~",paste(c(bact_variables$key_predictors,bact_variables$medimp_predictors), collapse="+")), collapse=""))
@@ -187,7 +189,7 @@ cat("\nMultiple R-squared:\n")
 print(round(red$rsq1,4))
 ```
 
-#### All predictors
+#### VIF for all predictor model
 
 ```{r}
 formula <- as.formula(paste(c("~",paste(c(bact_variables$key_predictors,bact_variables$medimp_predictors, bact_variables$remaining_predictors), collapse="+")), collapse=""))
@@ -204,11 +206,10 @@ cat("\nMultiple R-squared:\n")
 print(round(red$rsq1,4))
 ```
 
-### Redundancy by parametric additive models for each predictor
 
-Redundancy will further be explored by computing parametric additive models for each predictor in the key predictor model and the extended predictor model. We will report the VIFs and multiple $R^2$ from those models, again for the three predictor sets.
 
-#### Key predictor model
+
+#### Redundancy by parametric additive model: key predictor model
 
 ```{r}
 formula <- as.formula(paste(c("~",paste(bact_variables$key_predictors, collapse="+")), collapse=" "))
@@ -225,7 +226,7 @@ cat("\nMultiple R-squared:\n")
 print(round(red$rsq1,4))
 ```
 
-#### Key predictors and predictors of medium importance
+#### Redundancy by parametric additive model: key predictors and predictors of medium importance
 
 ```{r}
 formula <- as.formula(paste(c("~",paste(c(bact_variables$key_predictors,bact_variables$medimp_predictors), collapse="+")), collapse=""))
@@ -243,7 +244,7 @@ print(round(red$rsq1,4))
 ```
 
 
-#### All predictors
+#### Redundancy by parametric additive model: all predictors
 
 ```{r}
 # For redun(), for heavily clumped predictors, linearity must be enforced
