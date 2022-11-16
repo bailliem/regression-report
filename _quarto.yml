@@ -17,19 +17,20 @@ book:
     #- data_screen.qmd ## REMOVE
     - Bact_intro.qmd ## KEEP - MB CHECKED
     - Bact_IDA_plan.qmd ## KEEP
-    - Bact_missing.qmd ## KEEP
-    - Pseudo_log_explainer.qmd ## KEEP
-    - Bact_univar.qmd ## long running jobs - use ARd or freeze
-    - Bact_multivar.qmd ## KEEP
-    - Bact_suppl.qmd ## ADD
-    - Pseudo_log_explainer.qmd ## ADD
-    - references.qmd
+  #  - Bact_missing.qmd ## KEEP
+  #  - Pseudo_log_explainer.qmd ## KEEP
+  #  - Bact_univar.qmd ## long running jobs - use ARd or freeze
+  #  - Bact_multivar.qmd ## KEEP
+  #  - Bact_suppl.qmd ## ADD
+  #  - Pseudo_log_explainer.qmd ## ADD
+  #  - references.qmd
 
 bibliography: references.bib
 
 format:
   html:
     theme: cosmo
+    css: styles.css
     toc: true
     code-fold: true
     code-summary: "Show the code"

@@ -22,7 +22,7 @@ We refer to the source data set as the dataset available in this repository.
 
 First we read and display the data dictionary to provide an overview of the collected measurements. 
 
-```{r datadict, warning=FALSE, message=FALSE, echo=FALSE, results='asis'}
+```{r datadict, warning=FALSE, message=FALSE, echo=FALSE}
 bact.dd<-read_csv(here::here("misc", "bacteremia-DataDictionary.csv"))
 bact.dd %>% gt::gt()
 ```
@@ -34,9 +34,12 @@ Display the source dataset contents. The source dataset is in the **data-raw** f
 ## Load the source dataset from the data folder. 
 bact<-read.csv(here("data-raw", "Bacteremia_public_S2.csv"))
 
-html(Hmisc::contents(bact),
-            maxlevels = 10,
-            levelType = 'table')
+#html(Hmisc::contents(bact),
+#            maxlevels = 10,
+#            levelType = 'table')
+
+html(contents(bact))
+
 ```
 
 An alternative approach to displaying contents. 
@@ -99,7 +102,7 @@ save(a_bact, file = here::here("data", "a_bact.rda"))
 ## Section session info
 
 ```{r, warning=FALSE, message=FALSE, echo=FALSE}
-sessionInfo()
+#sessionInfo()
 ```
 
 
