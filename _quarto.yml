@@ -12,10 +12,10 @@ book:
   date: "11/14/2022"  ## changed
   chapters:
     - index.qmd  ## REMOVE
-    - IDA_framework.qmd ## REMOVE
-    - scope.qmd ## REMOVE
-    - data_screen.qmd ## REMOVE
-    - Bact_intro.qmd ## KEEP
+    #- IDA_framework.qmd ## REMOVE
+    #- scope.qmd ## REMOVE
+    #- data_screen.qmd ## REMOVE
+    - Bact_intro.qmd ## KEEP - MB CHECKED
     - Bact_IDA_plan.qmd ## KEEP
     - Bact_missing.qmd ## KEEP
     - Pseudo_log_explainer.qmd ## KEEP

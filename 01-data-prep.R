@@ -1,9 +1,10 @@
 #### data prep
-
+library(tidyverse)
 bact<-read.csv(here::here("data", "Bacteremia_public_S2.csv"))
 
 bact %>% glimpse()
- 
+
+bact %>% skimr::skim()
 
 Hmisc::html(Hmisc::contents(bact),
             maxlevels = 10,

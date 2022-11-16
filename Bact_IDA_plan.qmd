@@ -4,8 +4,7 @@
 library(here)
 library(tidyverse)
 
-
-load(here::here("data", "a_bact.rda"))
+load(here("data", "a_bact.rda"))
 ```
 
 
@@ -28,7 +27,7 @@ An adequate strategy to cope with missing values will also be chosen after scree
 The data dictionary of the bacteremia data set consists of columns for variable names, variable labels, scale of measurement (continuous or categorical), units, plausibility limits, and remarks:
 
 ```{r}
-bact.dd<-read.csv(here::here("misc", "bacteremia-DataDictionary.csv"))
+bact.dd<-read_csv(here::here("misc", "bacteremia-DataDictionary.csv"))
 
 bact.dd
 ```
