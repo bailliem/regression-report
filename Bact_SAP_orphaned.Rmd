@@ -1,4 +1,13 @@
-# IDA plan
+---
+title: "Bact_SAP_orphaned"
+author: "GH"
+date: "2022-08-30"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
 
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, echo=FALSE}
 ## Load libraries
@@ -273,4 +282,5 @@ Tudela P, Lacoma A, Prat C, Modol JM, Gimenez M, et al. (2010) Prediction of bac
 
 save(list=c("b_bact", "bact_variables", "demog_vars", "structural_vars","key_predictors","leuko_related_vars","leuko_ratio_vars","kidney_related_vars", "acute_related_vars","remaining_vars"), file = here::here("data", "bact_env_b.rda"))
 ```
+
 
