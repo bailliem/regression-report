@@ -82,13 +82,13 @@ pct_excl <- round((1-(dim(model_df_complete)[1] / dim(c_bact)[1])) * 100,1)
 #pct_complete <- dim(model_df_complete)[1] / dim(c_bact)[1] * 100
 ```
 
-In the following examples we use the Bacteremia data with complete observations regarding the key predictors `r paste(key_predictors_orig, collapse = ', ')`, which represent `r round(pct_complete, 1)`% of the whole dataset. We will fit a global logistic regression model with the outcome 'BC' and the key predictors as covariates. We will use pseudo-log transformations as suggested in the IDA. Within the model, all key predictors will be transformed by fractional polynomials of order 1 (df = 2).
+In the following examples we use the Bacteremia data with complete observations regarding the key predictors `r paste(key_predictors_orig, collapse = ', ')`, which represent `r round(100-pct_excl, 1)`% of the whole dataset. We will fit a global logistic regression model with the outcome 'BC' and the key predictors as covariates. We will use pseudo-log transformations as suggested in the IDA. Within the model, all key predictors will be transformed by fractional polynomials of order 1 (df = 2).
 
 The aim of the examples is to showcase how decisions derived from IDA influence the results of the fitted model.
 
 ## Global Model
 
-The global model will be fitted by the *mfp* function. If not indicated otherwise, we will use the fp-transformations of the key predictors determined in global model in all consecutive models. For all models we report McFaddens's R² and the AUC, i.e. the area under the ROC curve, and boxplots comparing BC predictions with outcomes.
+The global model will be fitted by the *mfp* function. If not indicated otherwise, we will use the fp-transformations of the key predictors determined in global model in all consecutive models. For all models we report the scaled Brier score and the AUC, i.e. the area under the ROC curve, and boxplots comparing BC predictions with outcomes.
 
 ### Model Summary
 
@@ -192,7 +192,7 @@ p_model_notrans <- logreg_summary_plot(fit_mfp_complete_notrans, 'global model \
 p_model_complete + coord_cartesian(ylim = c(0,.8)) + p_model_notrans + theme(axis.title.y = element_blank()) + coord_cartesian(ylim = c(0,.8))
 ```
 
-With regards to McFadden's R² and the AUC, the differences between the two approaches is marginal.
+With regards to the scaled Brier score and the AUC, the differences between the two approaches is marginal.
 
 Next we will compare the differences of the functional forms in the two models for those covariates where a pseudo-log transformation was suggested in IDA. We will look at the log odds for bacteremia by each covariate on the original and the transformed scale, and compare the global model using the original and the pseudo-log transformed covariates. Each variable is adjusted for the median of all other variables used.
 
@@ -309,8 +309,8 @@ Next we compare the global model to a model were for an important variable, in o
 
 m_pct <- .5
 
-sel_central <- (model_df_complete$Alter > quantile(model_df_complete$Alter, 0.5-m_pct/2)) & 
-  (model_df_complete$Alter < quantile(model_df_complete$Alter, 0.5+m_pct/2)) #needed later
+sel_central <- (model_df_complete$AGE > quantile(model_df_complete$AGE, 0.5-m_pct/2)) & 
+  (model_df_complete$AGE < quantile(model_df_complete$AGE, 0.5+m_pct/2)) #needed later
 
 set.seed(2)
 sel_sample <- as.logical(round(runif(dim(model_df_complete)[1]))) # 50% random selection, needed later
@@ -382,16 +382,16 @@ tidy(fit_mfp_complete) %>% gt_model_table('global model')
 
 ```
 
-Creatinine ('KREA') is significant at a level that might not survive substantial missingness. We thus create a dataset were we artificially introduce 50% missing creatinine values, missing completely at random.
+We pick creatinine ('CREA') as the predictor for which we artificially introduce 50% missingness completely at random.
 
 ```{r create missing crea, message = FALSE, warning = FALSE, fig.width = 10, fig.height=6, fig.width=12}
-# create 50% missings for t_KREA
-set.seed(3) # with seed=3, z-statistic for t_KREA is 1.48
+# create 50% missings for t_CREA
+set.seed(3) # with seed=3, z-statistic for t_CREA is 1.48
 model_df_missings <- model_df_complete %>%
   mutate(
-    t_KREA = ifelse(
+    t_CREA = ifelse(
       runif(dim(model_df_complete)[1]) < .5,  #~50%/50% TURE/FALSE
-      t_KREA,
+      t_CREA,
       NA
     )
   )
@@ -454,75 +454,23 @@ bind_rows(
   
 ```
 
-The z-statistic for creatinine drops from 2.98 to 1.49 when half the data is missing. Also in other variables the z-statistic is less extreme in the 'missing, complete case analysis' compared to the global model. The interesting observations is that MI recreates estimates and standard errors very close to the global model in most variables, but not in the one that was being imputed, namely creatinine. In variable selection, chreatinine, which is highly significant in the 'true' model, is likely to be dropped, based on the imputed data. 
 
 ```{r, message = FALSE, warning = FALSE}
 #pearson & spearman correalation of CREA and BUN
 
-r_pearson  <- cor(model_df_complete$t_KREA, model_df_complete$BUN, method = 'pearson') %>% round(3)
-r_spearman <- cor(model_df_complete$t_KREA, model_df_complete$BUN, method = 'spearman') %>% round(3)
+r_pearson  <- cor(model_df_complete$t_CREA, model_df_complete$BUN, method = 'pearson') %>% round(3)
+r_spearman <- cor(model_df_complete$t_CREA, model_df_complete$BUN, method = 'spearman') %>% round(3)
 
 ```
+
+The standard error of the regression coefficient of CREA increases from 0.198 to 0.285 when half the data is missing. Also in other variables the standard error increases approximately by a factor of  $\sqrt 2$, which is to be expected given that 50% of the data was not used for estimation. The interesting observations is that MI recreates estimates and standard errors very close to the global model in most variables, but not in the imputed variable CREA. Only for variable BUN the standard error of the original, full data model cannot be fully recovered, which can be explained by its correlation with CREA (Pearson: `r_pearson`, Spearman: `r_spearman`. In the complete case analysis CREA is relatively more important than in the analysis with imputed data.
+
+
 
 
 ## Example 4: Interpretation of regression coefficient 'size'
 
-The variables WBC_noNEU and t_WBC_noNEU are on two very different scales:
-
-```{r ex 4 plots, message = FALSE, warning = FALSE, fig.width=6, fig.height=4}
-
-p_ex4 <- model_df_complete %>%
-  select(key_predictors_trans[str_detect(key_predictors_trans, 't_')]) %>%
-  mutate_all(as.numeric) %>%
-  pivot_longer(cols = everything()) %>%
-  ggplot(aes(x = value, group = name)) + 
-  facet_wrap(~name, scales = 'free', strip.position = "bottom") +
-  geom_histogram(fill = 'firebrick2', color = NA, alpha = 0.5) +
-  theme_minimal() +
-  theme(strip.placement = 'outside')
-
-p_ex4
-
-# standardized regression coefficients
-
-tidy(fit_mfp_complete) %>%
-  select(term, estimate) %>%
-  filter(term != '(Intercept)') 
-
-model_df_complete %>%
-  summarise(
-    WBC_noNEU = sd(((t_WBC_noNEU + 0.1)^0.5) * fit_mfp_complete$coefficients[2]),
-    NEU = sd((t_NEU + 0.1) * fit_mfp_complete$coefficients[3]),
-    Age = sd((Alter / 100) * fit_mfp_complete$coefficients[4]),
-    CREA = sd((t_KREA) * fit_mfp_complete$coefficients[5]),
-    PLT = sd(((PLT + 1) / 100) * fit_mfp_complete$coefficients[6]),
-    BUN = sd((t_BUN) * fit_mfp_complete$coefficients[7])
-  ) %>%
-  pivot_longer(cols = everything(), names_to = 'variable', values_to = 'standardized beta') %>%
-  gt %>%
-  fmt_number(
-    2, decimals = 4
-  )
-
-  
-```
-
-Let us recall the two estimates to the covariates WBC_noNEU and t_WBC_noNEU.
-
-```{r ex 4 estimates, message = FALSE, warning = FALSE}
-
-bind_rows(
-  tidy(fit_mfp_complete) %>% select(term, estimate),
-  tidy(fit_mfp_complete_notrans) %>% select(term, estimate)
-  ) %>% 
-  filter(str_detect(term, 'WBC')) %>%
-  gt %>%
-  fmt_number(2, decimals = 2)
-
-```
-(Suggestion: show this with models without fp trafo?)
-
-Because the fp-transformations further complicate the interpretation of the regression coefficients, let us consider two logisitc regression models with WBC_noNEU and t_WBC_noNEU as single covariate, respectively.
+Let's consider two univariable logistic regression models with WBC_noNEU or t_WBC_noNEU as the only covariates.
 
 ```{r}
 
@@ -548,12 +496,11 @@ fit_wbc_orig$coefficients[2] %>% round(2)
 
 ```
 
-The estimates `r fit_wbc_orig$coefficients[2] %>% round(2)` and `r fit_wbc_trans$coefficients[2] %>% round(2)` denote the change in log odds for the outcome when the 'term' variable changes by 1 unit, but cannot be compared directly. A $1$ unit change is only a small step on the original scale, where WBC_noNEU covers values from `r range(model_df_complete$WBC_noNEU)[1]` up to `r range(model_df_complete$WBC_noNEU)[2]`. In comparison, t_WBC_noNEU lies between `r round(range(model_df_complete$t_WBC_noNEU)[1],2)` up to `r round(range(model_df_complete$t_WBC_noNEU)[2],2)`, so change of $1$ unit cover almost half the range of the variable. 
+The estimates `r fit_wbc_orig$coefficients[2] %>% round(2)` and `r fit_wbc_trans$coefficients[2] %>% round(2)` denote the difference in log odds for the outcome associated with a 1 unit difference in WBC_noNEU or t_WBC_noNEU. A 1 unit difference is only a small fraction of the range of WBC_noNEU (`r range(model_df_complete$WBC_noNEU)[1]` to `r range(model_df_complete$WBC_noNEU)[2]`). In comparison, t_WBC_noNEU ranges between `r round(range(model_df_complete$t_WBC_noNEU)[1],2)` and `r round(range(model_df_complete$t_WBC_noNEU)[2],2)`, so difference of 1 unit covers almost half the range of the variable. 
 
 ## Example 5: Plot of functional form should be resticted to areas with high density
 
-The functional forms have wide confidence intervals when the data is sparse. In presentations of the effects, plots of the functional forms can be limited to areas with high density. In this analysis, PLT was very sparse above ~800 [UNITS], which is reflected in a large confidence interval for high PLT values. In the effect plot PLT values could be limited to values <800 [UNITS].
-
+Estimated effects have wide confidence intervals when the data is sparse. When plotting the functional form of an effect, the plotted function can be limited to areas with sufficient predictor support. For example, for t_WBC_noNEU the mfp effect plot differs largely from the effect plot resulting from assuming a linear functional form for that predictor. However, when restricting the plotted area to the range between the 5th and 95th percentile for WBC_noNEU, the deviation of the MFP fit to the linear fit appears small. 
 ```{r}
 
 fit_linear_complete <- glm(as.formula(paste0('BC ~ ', paste(key_predictors_trans, collapse = '+'))),
@@ -597,7 +544,7 @@ plot_df <-
 p_ex5 <- plot_df %>% 
   ggplot(aes(x = t_WBC_noNEU, y = yhat, ymin = yhat.lwr, ymax = yhat.upr, color = model, group = model)) +
   geom_ribbon(alpha = .2, color = NA) +
-  geom_line(size = 1) +
+  geom_line(linewidth = 1) +
   geom_rug(
     data = fit_mfp_complete$X %>% as.data.frame, 
     aes(x = t_WBC_noNEU), 
@@ -617,6 +564,7 @@ p_ex5  + (p_ex5 + coord_cartesian(xlim = quantile(model_df_complete$t_WBC_noNEU,
 
 
 ```
+PLT was very sparse above values of ~800 G/L, which is reflected in a large confidence interval for high PLT values. In the effect plot PLT values could be limited to values <800 G/L, where it appears less extreme.
 
 
 

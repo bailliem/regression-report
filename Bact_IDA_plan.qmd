@@ -42,7 +42,7 @@ For the purpose of stratifying IDA results by age, age will be categorized into 
 
 The predictor grouping is defined here:
 
-```{r}
+```{r, echo=TRUE}
 #demog_vars <-c("AGE", "SEX")
 structural_vars <- c("AGE", "SEX")
 key_predictors <- c("WBC", "AGE", "BUN","CREA","NEU","PLT")
